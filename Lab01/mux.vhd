@@ -8,6 +8,7 @@ end mux;
 
 architecture beh of mux is 
 begin
+--ciao
 process (SW(8 downto 0))
 begin 
 if SW(8) = '1' then 
