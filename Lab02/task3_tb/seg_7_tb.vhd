@@ -6,27 +6,27 @@ end seg_7_tb;
 
 architecture beh of seg_7_tb is
 component seg_7 is
-port (sw: in std_logic_vector(2 downto 0);
+port (sw: in std_logic_vector(3 downto 0);
 hex0: out std_logic_vector(6 downto 0));
 end component;
 
-signal sw_tb: std_logic_vector(2 downto 0);
+signal sw_tb: std_logic_vector(3 downto 0);
 signal hex0_tb: std_logic_vector(6 downto 0);
 
 begin 
 process
 begin
-sw_tb <= "000";
+sw_tb <= "0000";
 wait for 10 ns;
-sw_tb <= "001";
+sw_tb <= "0001";
 wait for 10 ns;
-sw_tb <= "011";
+sw_tb <= "1010";
 wait for 10 ns;
-sw_tb <= "100";
+sw_tb <= "1001";
 wait for 10 ns;
-sw_tb <= "101";
+sw_tb <= "0101";
 wait for 10 ns;
-sw_tb <= "000";
+sw_tb <= "1111";
 wait;
 end process;
 
