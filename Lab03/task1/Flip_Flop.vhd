@@ -1,12 +1,12 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 
-entity FlipFlop is
+entity Flip_Flop is
 port (D, CLK, Resetn: in std_logic;
 	OVF: out std_logic);
-end FlipFlop;
+end Flip_Flop;
 
-architecture beh of FlipFlop is
+architecture beh of Flip_Flop is
 begin
 process(CLK, Resetn)
 begin
