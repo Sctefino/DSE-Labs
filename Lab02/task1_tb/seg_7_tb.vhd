@@ -18,13 +18,13 @@ testbench: seg_7 port map(sw_tb, hex0_tb);
 process
 begin
 sw_tb <= "000";
-wait for 10ns;
+wait for 20ns;
 sw_tb <= "001";
-wait for 10ns;
+wait for 20ns;
 sw_tb <= "010";
-wait for 10ns;
+wait for 20ns;
 sw_tb <= "011";
-wait for 10ns;
+wait for 20ns;
 sw_tb <= "100";
 wait;
 
