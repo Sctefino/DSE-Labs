@@ -7,7 +7,7 @@ output : OUT STD_LOGIC_VECTOR(14 downto 0));
 END shifter;
 ARCHITECTURE Behavior OF shifter IS
 begin
-process(sel)
+process(sel, input)
 begin
 if sel = "000" then
 output <= input;
