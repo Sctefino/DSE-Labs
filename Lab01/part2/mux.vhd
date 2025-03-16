@@ -16,5 +16,5 @@ else
 LEDR(3 downto 0) <= SW(3 downto 0);
 end if;
 end process;
-LEDR(9 downto 4) <= "000000"; --spengo led non usati
+--LEDR(9 downto 4) <= "000000"; --spengo led non usati
 end beh;
