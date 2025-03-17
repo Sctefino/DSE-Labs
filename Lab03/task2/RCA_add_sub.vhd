@@ -35,7 +35,7 @@ hex0: out std_logic_vector(6 downto 0));
 end component;
 
 component ovf is
-port(c_o, a_msb, b_msb, s_msb: in std_logic;
+port(a_msb, b_msb, s_msb: in std_logic;
 	      ov: out std_logic
 	);
 end component;
@@ -55,7 +55,7 @@ FA1: Adder port map(a => a(0), b => beff(0), c_in => sw(8), s => s(0), c_o => c(
 FA2: Adder port map(a => a(1), b => beff(1), c_in => c(0), s => s(1), c_o => c(1));
 FA3: Adder port map(a => a(2), b => beff(2), c_in => c(1), s => s(2), c_o => c(2));
 FA4: Adder port map(a => a(3), b => beff(3), c_in => c(2), s => s(3), c_o => c(3));
-OVERF: ovf port map(c_o => c(3), a_msb => a(3), b_msb => beff(3), s_msb => s(3), ov => d);
+OVERF: ovf port map(a_msb => a(3), b_msb => beff(3), s_msb => s(3), ov => d);
 Register_3: Regn generic map ( N => 4) port map(R => s, CLK => key(1), Resetn => key(0), Q => g);
 FF: Flip_Flop port map(D => d, CLK => key(1), Resetn => key(0), OVF => e);
 Segment: seg_7 port map(sw => std_logic_vector(g), hex0 => hex2);
