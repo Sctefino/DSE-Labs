@@ -5,7 +5,8 @@ USE ieee.numeric_std.all;
 entity RCA16Bit is
 port (a_in,b_in: in signed(15 downto 0);
 		key: in std_logic_vector(1 downto 0);
-		t: out signed(15 downto 0));
+		t: out signed(15 downto 0);
+		LEDR: out std_logic_vector(9 downto 0));
 end RCA16Bit;
 
 architecture str of RCA16Bit is
@@ -60,5 +61,14 @@ t <= s;
 OVERF: ovf port map(a_msb => a(15), b_msb => b(15), s_msb => q, ov => d);
 Register_3: Reg generic map(N => 16) port map(R => s, CLK => key(1), Resetn => key(0), Q => g);
 FF: Flip_Flop port map(D => d, CLK => key(1), Resetn => key(0), OVF => e);
+
+process(key(1))
+begin
+if e = '1' then
+LEDR <= "1111111111";
+elsif e = '0' then
+LEDR <= "0000000000";
+end if;
+end process;
 
 end str;
