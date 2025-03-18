@@ -33,7 +33,7 @@ port (D, CLK, Resetn: in std_logic;
 end component;
 
 component ovf is
-port(c_o, a_msb, b_msb, s_msb: in std_logic;
+port(a_msb, b_msb, s_msb: in std_logic;
 	      ov: out std_logic
 	);
 end component;
@@ -58,7 +58,7 @@ signal temp0_std, temp1_std: std_logic_vector(11 downto 0);
 signal s_temp: std_logic_vector(11 downto 0);
 signal c0: std_logic_vector(3 downto 0);
 signal c1, cmux: std_logic_vector(2 downto 0);
-signal d: std_logic := '0';
+signal d, e: std_logic := '0';
 
 begin
 temp0_std <= std_logic_vector(temp0);
@@ -83,15 +83,15 @@ muxc1: mux port map(a => c0(1), b => c1(0), sel => c0(0), c => cmux(0));
 muxc2: mux port map(a => c0(2), b => c1(1), sel => cmux(0), c => cmux(1));
 muxc3: mux port map(a => c0(3), b => c1(2), sel => cmux(1), c => cmux(2));
 
-OVERF: ovf port map(c_o => cmux(2), a_msb => a_ff(15), b_msb => b_ff(15), s_msb => s_add(15), ov => d);
+OVERF: ovf port map(a_msb => a_ff(15), b_msb => b_ff(15), s_msb => s_add(15), ov => d);
 Register_3: Regn generic map ( N => 16) port map(R => s_add, CLK => key(1), Resetn => key(0), Q => s);
-FF: Flip_Flop port map(D => cmux(2), CLK => key(1), Resetn => key(0), OVF => d);
+FF: Flip_Flop port map(D => d, CLK => key(1), Resetn => key(0), OVF => e);
 
 process(key(1))
 begin
-if d='1' then
+if e='1' then
 LEDR <= "1111111111";
-elsif d='0' then
+elsif e='0' then
 LEDR <= "0000000000";
 end if;
 end process;
