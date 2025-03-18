@@ -27,7 +27,7 @@ hex0 <= "0000010";
 elsif sw = "0111" or sw = "1001" then
 hex0 <= "1111000";
 elsif sw = "1000" then
-hex0 <= "1111000";
+hex0 <= "0000000";
 else hex0 <= "1111111"; --se non tra 0 e 15, spengo
 end if;
 end process;
