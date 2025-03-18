@@ -40,9 +40,9 @@ end component;
 
 component mux_nbit is
 generic(N : integer := 4);
-port(a,b: in std_logic_vector(N downto 0);
+port(a,b: in std_logic_vector(N-1 downto 0);
 	  sel: in std_logic;
-	  c: out std_logic_vector(N downto 0)
+	  c: out std_logic_vector(N-1 downto 0)
 );
 end component;
 
