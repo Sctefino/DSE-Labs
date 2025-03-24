@@ -30,18 +30,8 @@ elsif sw = "1000" then --8
 hex <= "0000000";
 elsif sw = "1001" then --9
 hex <= "0011000";
-elsif sw = "1010" then --A
-hex <= "0001000";
-elsif sw ="1011" then --b
-hex <= "0000011";
-elsif sw = "1100" then --C
-hex <= "1000110";
-elsif sw ="1101" then --d
-hex <= "0100001";
-elsif sw ="1110" then --E
-hex <= "0000110";
-else --F
-hex <= "0001110";
+else
+hex <= "1111111";
 end if;
 end process;
 end beh;
