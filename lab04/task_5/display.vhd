@@ -13,7 +13,7 @@ signal unit,dec,cent,sec : std_logic_vector(15 downto 0);
 begin
 process(en)
 begin
-if en = '1' then
+if en = '0' then
 unit <= std_logic_vector(unsigned(a) mod 10);
 b <= unit(3 downto 0);
 dec <= std_logic_vector((unsigned(a)/10) mod 10);
@@ -23,10 +23,10 @@ d <= cent(3 downto 0);
 sec <= std_logic_vector((unsigned(a)/1000));
 e <= sec(3 downto 0);
 else
-b <= (others => '1');
-c <= (others => '1');
-d <= (others => '1');
-e <= (others => '1');
+b <= (others => '0');
+c <= (others => '0');
+d <= (others => '0');
+e <= (others => '0');
 end if;
 end process;
 end beh;

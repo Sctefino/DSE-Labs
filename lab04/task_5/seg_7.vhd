@@ -40,8 +40,10 @@ elsif sw ="1101" then --d
 hex <= "0100001";
 elsif sw ="1110" then --E
 hex <= "0000110";
-else --F
+elsif SW = "1111" then --F
 hex <= "0001110";
+else
+hex <= (others => '1');
 end if;
 end process;
 end beh;

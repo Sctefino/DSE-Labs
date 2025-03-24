@@ -1,22 +1,25 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
 
 entity ff is
-port (a,sel,ck,rstn : in std_logic;
-b : out std_logic);
+    Port (
+        A   : in  STD_LOGIC;
+        B   : in  STD_LOGIC;
+        Q   : out STD_LOGIC
+    );
 end ff;
 
-architecture beh of ff is
-signal c : std_logic := '0';
+architecture Behavioral of ff is
+    signal state : STD_LOGIC := '0';
 begin
-process(ck,rstn)
-begin
-if rstn = '1' then
-b <= '0';
-elsif ck = '1' and ck'event and sel = '1' then
-c <= a;
-end if;
-b <= c;
-end process;
-end beh;
+    process (A, B)
+    begin
+        if B = '1' then
+            state <= '0';
+        elsif A = '1' then
+            state <= '1';
+        end if;
+    end process;
+    
+    Q <= state;
+end Behavioral;
