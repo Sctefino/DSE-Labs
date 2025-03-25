@@ -7,7 +7,7 @@ Generic (N : integer := 26);
 port (ck   : in std_logic;
 rstn : in std_logic;
 a : in std_logic;
-c : in std_logic;
+stop : in std_logic; --segnale che ferma conteggio
 b : out std_logic_vector(N-1 downto 0));
 end adder;
 
@@ -15,24 +15,18 @@ architecture beh of adder is
 signal sum : unsigned(N-1 downto 0) := (others => '0');
 signal add : unsigned(N-1 downto 0) := (others => '0');
 begin
-process (ck, rstn)
+process (ck, rstn, stop) --aggiunta c in sensitivity list
 begin
-add(1) <= '1';
-if rstn = '0' then
+if rstn = '1' then --reset asincrono
 sum <= (others => '0');
-b   <= (others => '0');
 elsif rising_edge(ck) then
-if a = '1' then
+if a = '1' then --reset sincrono
 sum <= (others => '0');
-b   <= (others => '0');
-elsif c = '1' then
-add(0) <= '0';
+elsif stop = '1' then --se non devo fermarmi incremento di 1, altrimenti lascio fermo
+add(0) <= '1';
 sum <= sum + add;
-b   <= std_logic_vector(sum);
-else
-sum <= sum + add;
-b   <= std_logic_vector(sum);
 end if;
 end if;
 end process;
+b <= std_logic_vector(sum);
 end beh;

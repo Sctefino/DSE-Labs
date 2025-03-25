@@ -28,67 +28,68 @@ Generic (N : integer);
 port (ck   : in std_logic;
 rstn : in std_logic;
 a : in std_logic;
-c : in std_logic;
+stop : in std_logic;
 b : out std_logic_vector(N-1 downto 0));
 end component;
 
-component ff
+component ff_d
     Port (
-        A   : in  STD_LOGIC;
-        B   : in  STD_LOGIC;
+        CLK, D, res : in  STD_LOGIC;
         Q   : out STD_LOGIC
     );
 end component;
 
 component display
 port ( a : in std_logic_vector(15 downto 0);
-en : in std_logic;
 b,c,d,e : out std_logic_vector(3 downto 0));
 end component;
 
-signal switches : unsigned(23 downto 0);
-signal thr,add1out : std_logic_vector(23 downto 0);
-signal thr1 : std_logic_vector(47 downto 0);
-signal add2out, add3out : std_logic_vector(15 downto 0);
-signal ffout1, ffout2,compout1,compout2 : std_logic;
-signal h0,h1,h2,h3 : std_logic_vector(3 downto 0);
+--signal switches : unsigned(23 downto 0);
+--signal thr,add1out : std_logic_vector(23 downto 0);
+--signal thr1 : std_logic_vector(47 downto 0);
+signal add1out, add3out : std_logic_vector(15 downto 0);
+signal add2out: std_logic_vector(7 downto 0);
+signal ffout1, compout1, compout2, res_ff1, stop_add2: std_logic;
+signal h0, h1, h2, h3 : std_logic_vector(3 downto 0);
 
 begin
 
-switches <= resize(unsigned(sw),24);
-thr1 <= std_logic_vector( "000000001100001101010000" * switches);
-thr <= thr1(23 downto 0);
-LEDR(0) <= compout1 and not(key(3));
+--switches <= resize(unsigned(sw),24);
+--thr1 <= std_logic_vector( "000000001100001101010000" * switches);
+--thr <= thr1(23 downto 0);
+LEDR(0) <= ffout1;
 LEDR(9 downto 1) <= (others => '0');
+res_ff1 <= key(0) or key(3);
+stop_add2 <= not(compout2);
 
 comp1 : comparator
-generic map ( N => 24)
-port map(add1out,thr,compout1);
+generic map ( N => 16)
+port map(add1out,"0110000110101000",compout1); --25000 -> chiedi a Gab se lui capisce il perché
 
 comp2 : comparator
-generic map ( N => 16)
-port map(add2out,"1100001101010000",compout2);
+generic map ( N => 8)
+port map(add2out,sw,compout2); --Problema: ad occhio spreca 1 ms
 
-ff1: ff
-port map(compout1,key(0),ffout1);
+ff1: ff_d
+port map(compout2, '1', res_ff1 ,ffout1);
 
-ff2 : ff
-port map(key(3),key(0),ffout2);
+--ff2 : ff
+--port map(key(3),key(0),ffout2);
 
 add1 : adder
-generic map(N => 24)
-port map(clock_50,key(0),ffout1,compout1,add1out);
+generic map(N => 16)
+port map(clock_50,key(0),compout1,'1',add1out);
 
 add2 : adder
-generic map(N => 16)
-port map(clock_50,key(0),compout2,'0',add2out);
+generic map(N => 8)
+port map(compout1,key(0),'0',stop_add2,add2out);
 
 add3 : adder
 generic map(N => 16)
-port map(compout2,key(0),ffout2,not(key(3)),add3out);
+port map(compout1,key(0),'0',ffout1,add3out);
 
 dis : display
-port map(add3out,key(3),h0,h1,h2,h3);
+port map(add3out,h0,h1,h2,h3);
 
 hex_0 : seg_7
 port map(h0,hex0);
