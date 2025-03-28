@@ -41,22 +41,23 @@ port(a_msb, b_msb, s_msb: in std_logic;
 end component;
 
 signal a,b,c,s,g,beff: signed(3 downto 0);
-signal d,e: std_logic := '0';
+signal d,e,ff_sw: std_logic := '0';
 
 begin
 
 Register_1: regn generic map ( N => 4) port map(R => sw(3 downto 0), CLK => key(1), Resetn => key(0), Q => a);
 Register_2: Regn generic map ( N => 4) port map(R => sw(7 downto 4), CLK => key(1), Resetn => key(0), Q => b);
-beff(0) <= b(0) xor sw(8); --sw(8) a 0 somma, sw(8) a 1 differenza
-beff(1) <= b(1) xor sw(8);
-beff(2) <= b(2) xor sw(8);
-beff(3) <= b(3) xor sw(8);
-FA1: Adder port map(a => a(0), b => beff(0), c_in => sw(8), s => s(0), c_o => c(0)); 
+beff(0) <= b(0) xor ff_sw; --sw(8) a 0 somma, sw(8) a 1 differenza
+beff(1) <= b(1) xor ff_sw;
+beff(2) <= b(2) xor ff_sw;
+beff(3) <= b(3) xor ff_sw;
+FA1: Adder port map(a => a(0), b => beff(0), c_in => ff_sw, s => s(0), c_o => c(0)); 
 FA2: Adder port map(a => a(1), b => beff(1), c_in => c(0), s => s(1), c_o => c(1));
 FA3: Adder port map(a => a(2), b => beff(2), c_in => c(1), s => s(2), c_o => c(2));
 FA4: Adder port map(a => a(3), b => beff(3), c_in => c(2), s => s(3), c_o => c(3));
 OVERF: ovf port map(a_msb => a(3), b_msb => beff(3), s_msb => s(3), ov => d);
 Register_3: Regn generic map ( N => 4) port map(R => s, CLK => key(1), Resetn => key(0), Q => g);
+FF_sw8: Flip_Flop port map(D => sw(8), CLK => key(1), Resetn => key(0), OVF => ff_sw);
 FF: Flip_Flop port map(D => d, CLK => key(1), Resetn => key(0), OVF => e);
 Segment: seg_7 port map(sw => std_logic_vector(g), hex0 => hex2);
 Segment1: seg_7 port map(sw => std_logic_vector(a), hex0 => hex0);
