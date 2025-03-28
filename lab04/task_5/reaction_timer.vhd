@@ -7,6 +7,7 @@ port (clock_50 : in std_logic;
 sw : in std_logic_vector(7 downto 0);
 key : in std_logic_vector(3 downto 0);
 ledr : out std_logic_vector(9 downto 0);
+clk_kHz: out std_logic;
 hex0,hex1,hex2,hex3 : out std_logic_vector(6 downto 0));
 end reaction_timer;
 
@@ -26,7 +27,7 @@ end component;
 component adder
 Generic (N : integer);
 port (ck   : in std_logic;
-rstn : in std_logic;
+rst : in std_logic;
 a : in std_logic;
 stop : in std_logic;
 b : out std_logic_vector(N-1 downto 0));
@@ -49,7 +50,7 @@ end component;
 --signal thr1 : std_logic_vector(47 downto 0);
 signal add1out, add3out : std_logic_vector(15 downto 0);
 signal add2out: std_logic_vector(7 downto 0);
-signal ffout1, compout1, compout2, res_ff1, stop_add2: std_logic;
+signal ffout1, compout1, compout2, res_ff1, stop_add2, key_0_n, key_3_n: std_logic;
 signal h0, h1, h2, h3 : std_logic_vector(3 downto 0);
 
 begin
@@ -59,8 +60,11 @@ begin
 --thr <= thr1(23 downto 0);
 LEDR(0) <= ffout1;
 LEDR(9 downto 1) <= (others => '0');
-res_ff1 <= key(0) or key(3);
+key_0_n <= not(key(0));
+key_3_n <= not(key(3));
+res_ff1 <= key_0_n or key_3_n;
 stop_add2 <= not(compout2);
+clk_kHz <= compout1;
 
 comp1 : comparator
 generic map ( N => 16)
@@ -78,15 +82,15 @@ port map(compout2, '1', res_ff1 ,ffout1);
 
 add1 : adder
 generic map(N => 16)
-port map(clock_50,key(0),compout1,'1',add1out);
+port map(clock_50,key_0_n,compout1,'1',add1out);
 
 add2 : adder
 generic map(N => 8)
-port map(compout1,key(0),'0',stop_add2,add2out);
+port map(compout1,key_0_n,'0',stop_add2,add2out);
 
 add3 : adder
 generic map(N => 16)
-port map(compout1,key(0),'0',ffout1,add3out);
+port map(compout1,key_0_n,'0',ffout1,add3out);
 
 dis : display
 port map(add3out,h0,h1,h2,h3);
