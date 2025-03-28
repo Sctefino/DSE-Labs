@@ -37,61 +37,63 @@ FF_I : FF port map (KEY(0),SW(0), next_state(8), state(8));
 
         -- Stato A
         if state(0) = '1' then
-            if sw(1) = '0' then next_state(1) <= '1'; -- Vai in B
-            else next_state(5) <= '1'; -- Vai in F
+            if sw(1) = '0' then next_state <= "000000010"; -- Vai in B
+            else next_state <= "000100000"; -- Vai in F
             end if;
         end if;
 
         -- Stato B
         if state(1) = '1' then
-            if sw(1) = '0' then next_state(2) <= '1'; -- Vai in C
-            else next_state(5) <= '1'; -- Vai in F
+            if sw(1) = '0' then next_state <= "000000100"; -- Vai in C
+            else next_state<= "000100000"; -- Vai in F
             end if;
         end if;
 
         -- Stato C
         if state(2) = '1' then
-            if sw(1) = '0' then next_state(3) <= '1'; -- Vai in D
-            else next_state(5) <= '1'; -- Vai in F
+            if sw(1) = '0' then next_state<= "000001000"; -- Vai in D
+            else next_state <= "000100000"; -- Vai in F
             end if;
         end if;
 
         -- Stato D
         if state(3) = '1' then
-            if sw(1) = '0' then next_state(4) <= '1'; -- Vai in E
-            else next_state(5) <= '1'; -- Vai in F
+            if sw(1) = '0' then next_state <= "000010000"; -- Vai in E
+            else next_state <= "000100000"; -- Vai in F
             end if;
         end if;
 
         -- Stato E (uscita z = 1)
         if state(4) = '1' then
-            next_state(0) <= '1'; -- Torna in A
+            if sw(1) = '0' then next_state <= "000100000"; -- Vai in F
+            end if;
         end if;
 
         -- Stato F
         if state(5) = '1' then
-            if sw(1) = '1' then next_state(6) <= '1'; -- Vai in G
-            else next_state(1) <= '1'; -- Vai in B
+            if sw(1) = '1' then next_state <= "001000000"; -- Vai in G
+            else next_state <= "000000010"; -- Vai in B
             end if;
         end if;
 
         -- Stato G
         if state(6) = '1' then
-            if sw(1) = '1' then next_state(7) <= '1'; -- Vai in H
-            else next_state(1) <= '1'; -- Vai in B
+            if sw(1) = '1' then next_state <= "010000000"; -- Vai in H
+            else next_state <= "000000010"; -- Vai in B
             end if;
         end if;
 
         -- Stato H
         if state(7) = '1' then
-            if sw(1) = '1' then next_state(8) <= '1'; -- Vai in I
-            else next_state(1) <= '1'; -- Vai in B
+            if sw(1) = '1' then next_state <= "100000000"; -- Vai in I
+            else next_state <= "000000010"; -- Vai in B
             end if;
         end if;
 
         -- Stato I (uscita z = 1)
         if state(8) = '1' then
-            next_state(0) <= '1'; -- Torna in A
+            if sw(1) = '1' then next_state <= "000000010"; -- Vai in B
+            end if;
         end if;
     end process;
 
