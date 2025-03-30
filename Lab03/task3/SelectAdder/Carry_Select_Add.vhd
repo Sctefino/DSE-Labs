@@ -12,7 +12,7 @@ end Carry_Select_Add;
 
 architecture str of Carry_select_Add is
 
-component Regn 
+component Reg 
 generic (N: integer:=4);
 port (R: in signed(N-1 downto 0);
 	CLK, Resetn: in std_logic;
@@ -64,8 +64,8 @@ begin
 temp0_std <= std_logic_vector(temp0);
 temp1_std <= std_logic_vector(temp1);
 s_add(15 downto 4) <= signed(s_temp);
-Register_1: regn generic map ( N => 16) port map(R => a, CLK => key(1), Resetn => key(0), Q => a_ff);
-Register_2: Regn generic map ( N => 16) port map(R => b, CLK => key(1), Resetn => key(0), Q => b_ff);
+Register_1: Reg generic map ( N => 16) port map(R => a, CLK => key(1), Resetn => key(0), Q => a_ff);
+Register_2: Reg generic map ( N => 16) port map(R => b, CLK => key(1), Resetn => key(0), Q => b_ff);
 
 Block0: FA_4bit port map (a => a_ff(3 downto 0), b => b_ff(3 downto 0), c_in => '0', c_out => c0(0), s => s_add(3 downto 0));
 Block1_0: FA_4bit port map (a => a_ff(7 downto 4), b => b_ff(7 downto 4), c_in => '0', c_out => c0(1), s => temp0(3 downto 0)); 
@@ -84,7 +84,7 @@ muxc2: mux port map(a => c0(2), b => c1(1), sel => cmux(0), c => cmux(1));
 muxc3: mux port map(a => c0(3), b => c1(2), sel => cmux(1), c => cmux(2));
 
 OVERF: ovf port map(a_msb => a_ff(15), b_msb => b_ff(15), s_msb => s_add(15), ov => d);
-Register_3: Regn generic map ( N => 16) port map(R => s_add, CLK => key(1), Resetn => key(0), Q => s);
+Register_3: Reg generic map ( N => 16) port map(R => s_add, CLK => key(1), Resetn => key(0), Q => s);
 FF: Flip_Flop port map(D => d, CLK => key(1), Resetn => key(0), OVF => e);
 
 process(key(1))
