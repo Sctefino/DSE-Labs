@@ -9,7 +9,7 @@ end mux;
 
 architecture beh of mux is
 begin
-	process(a,b,sel)
+	process(a,b,sel) --multiple if assignements
 	begin
 		if(sel = '0') then
 			c <= a;
