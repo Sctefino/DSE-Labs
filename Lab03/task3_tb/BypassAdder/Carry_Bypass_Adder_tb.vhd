@@ -26,7 +26,7 @@ wait for 15 ns;
 a_tb <= "0011000100011100";
 b_tb <= "0011010001001001";
 wait for 20 ns;
-a_tb <= "1111000100011100";
+a_tb <= "0111000100011100";
 b_tb <= "0011010001001001";
 wait for 20 ns;
 a_tb <= "1010000100011100";
@@ -49,9 +49,9 @@ end process;
 process
 begin
 key_tb <= "01";
-wait for 20 ns;
+wait for 10 ns;
 key_tb <= "11";
-wait for 20 ns;
+wait for 10 ns;
 end process;
 
 tb: Carry_Bypass_Adder port map(a_tb, b_tb, key_tb, t_tb, LEDR_tb);

@@ -2,14 +2,14 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-entity Reg is
+entity Regn is
 generic (N: integer:=16);
 port (R: in signed(N-1 downto 0);
 	CLK, Resetn: in std_logic;
 	Q: out signed(N-1 downto 0));
-end Reg;
+end Regn;
 
-architecture beh of Reg is
+architecture beh of Regn is
 begin
 process(CLK, Resetn)
 begin
