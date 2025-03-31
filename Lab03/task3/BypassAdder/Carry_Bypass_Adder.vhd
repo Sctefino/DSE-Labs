@@ -69,13 +69,6 @@ Reg_1: Reg generic map(N => 16) port map(R => b, CLK => key(1), Resetn => key(0)
 Reg_2: Reg generic map(N => 16) port map(R => t_r, CLK => key(1), Resetn => key(0), Q => t);
 Overflow: ovf port map(a_msb => a_r(15), b_msb => b_r(15), s_msb => t_r(15), ov => ov);
 
-process(key(1)) --Key(1) is the clock
-begin
-if d = '1' then
-LEDR <= "1111111111";
-elsif d = '0' then
-LEDR <= "0000000000";
-end if;
-end process;
+LEDR <= (others => d);
 
 end str;
