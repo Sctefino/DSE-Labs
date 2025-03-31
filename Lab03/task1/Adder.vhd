@@ -10,15 +10,15 @@ end Adder;
 
 architecture beh of Adder is
 
-component mux is
+component mux is --component declaration
 	port(a,b,sel: in std_logic;
 		  c: out std_logic
 	);
 end component;
 signal x: std_logic := '0';
 begin
-mux1: mux port map(a => b, b => c_in, sel => x, c => c_o);
+mux1: mux port map(a => b, b => c_in, sel => x, c => c_o); --carry out
 x <= a xor b;
-s <= x xor c_in; 
+s <= x xor c_in; --sum value
 		
 end beh;
