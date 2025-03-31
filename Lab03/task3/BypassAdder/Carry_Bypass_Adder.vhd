@@ -11,7 +11,7 @@ end Carry_Bypass_Adder;
 
 architecture str of Carry_Bypass_Adder is
 
-component Reg 
+component Regn 
 generic (N: integer:=16);
 port (R: in signed(N-1 downto 0);
 		CLK, Resetn: in std_logic;
@@ -64,9 +64,9 @@ sel(1) <= (a(4) xor b(4)) and (a(5) xor b(5)) and (a(6) xor b(6)) and (a(7) xor 
 sel(2) <= (a(8) xor b(8)) and (a(9) xor b(9)) and (a(10) xor b(10)) and (a(11) xor b(11));
 sel(3) <= (a(12) xor b(12)) and (a(13) xor b(13)) and (a(14) xor b(14)) and (a(15) xor b(15));
 FF: Flip_Flop port map(D => ov, CLK => key(1), Resetn => key(0), OVF => d);
-Reg_0: Reg generic map(N => 16) port map(R => a, CLK => key(1), Resetn => key(0), Q => a_r);
-Reg_1: Reg generic map(N => 16) port map(R => b, CLK => key(1), Resetn => key(0), Q => b_r);
-Reg_2: Reg generic map(N => 16) port map(R => t_r, CLK => key(1), Resetn => key(0), Q => t);
+Reg_0: Regn generic map(N => 16) port map(R => a, CLK => key(1), Resetn => key(0), Q => a_r);
+Reg_1: Regn generic map(N => 16) port map(R => b, CLK => key(1), Resetn => key(0), Q => b_r);
+Reg_2: Regn generic map(N => 16) port map(R => t_r, CLK => key(1), Resetn => key(0), Q => t);
 Overflow: ovf port map(a_msb => a_r(15), b_msb => b_r(15), s_msb => t_r(15), ov => ov);
 
 LEDR <= (others => d);
