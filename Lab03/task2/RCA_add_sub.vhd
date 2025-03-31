@@ -63,13 +63,11 @@ Segment: seg_7 port map(sw => std_logic_vector(g), hex0 => hex2);
 Segment1: seg_7 port map(sw => std_logic_vector(a), hex0 => hex0);
 Segment2: seg_7 port map(sw => std_logic_vector(b), hex0 => hex1);
 
-process(e)
+process(key(1))
 begin
 if e='1' then
 LEDR <= "1111111111";
 elsif e='0' then
-LEDR <= "0000000000";
-else
 LEDR <= "0000000000";
 end if;
 end process;
