@@ -11,7 +11,7 @@ end RCA;
 
 architecture str of RCA is
 
-component Regn 
+component Regn --component declaration
 generic (N: integer:=4);
 port (R: in signed(N-1 downto 0);
 	CLK, Resetn: in std_logic;
@@ -45,7 +45,7 @@ signal d,e: std_logic := '0';
 
 begin
 
-Register_1: regn generic map ( N => 4) port map(R => sw(3 downto 0), CLK => key(1), Resetn => key(0), Q => a);
+Register_1: regn generic map ( N => 4) port map(R => sw(3 downto 0), CLK => key(1), Resetn => key(0), Q => a); --creation of circuital parts
 Register_2: Regn generic map ( N => 4) port map(R => sw(7 downto 4), CLK => key(1), Resetn => key(0), Q => b);
 FA1: Adder port map(a => a(0), b => b(0), c_in => '0', s => s(0), c_o => c(0));
 FA2: Adder port map(a => a(1), b => b(1), c_in => c(0), s => s(1), c_o => c(1));
@@ -58,11 +58,13 @@ Segment: seg_7 port map(sw => std_logic_vector(g), hex0 => hex2);
 Segment1: seg_7 port map(sw => std_logic_vector(a), hex0 => hex0);
 Segment2: seg_7 port map(sw => std_logic_vector(b), hex0 => hex1);
 
-process(key(1))
+process(e) -- turn of if there is ovf
 begin
 if e='1' then
 LEDR <= "1111111111";
 elsif e='0' then
+LEDR <= "0000000000";
+else 
 LEDR <= "0000000000";
 end if;
 end process;
