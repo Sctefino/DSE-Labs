@@ -11,7 +11,7 @@ end RCA16Bit;
 
 architecture str of RCA16Bit is
 
-component Reg 
+component Regn 
 generic (N: integer:=16);
 port (R: in signed(N-1 downto 0);
 		CLK, Resetn: in std_logic;
@@ -38,8 +38,8 @@ signal d,e,q: std_logic;
 
 begin
 
-Register_1: Reg generic map(N => 16) port map(R => a_in, CLK => key(1), Resetn => key(0), Q => a);
-Register_2: Reg generic map(N => 16) port map(R => b_in, CLK => key(1), Resetn => key(0), Q => b);
+Register_1: Regn generic map(N => 16) port map(R => a_in, CLK => key(1), Resetn => key(0), Q => a);
+Register_2: Regn generic map(N => 16) port map(R => b_in, CLK => key(1), Resetn => key(0), Q => b);
 FA_1: Adder port map(a => a(0), b => b(0), c_in => '0', s => s(0), c_o => c(0));
 FA_2: Adder port map(a => a(1), b => b(1), c_in => c(0), s => s(1), c_o => c(1));
 FA_3: Adder port map(a => a(2), b => b(2), c_in => c(1), s => s(2), c_o => c(2));
@@ -59,7 +59,7 @@ FA_16: Adder port map(a => a(15), b => b(15), c_in => c(14), s => q, c_o => c(15
 s(15) <= q;
 t <= s;
 OVERF: ovf port map(a_msb => a(15), b_msb => b(15), s_msb => q, ov => d);
-Register_3: Reg generic map(N => 16) port map(R => s, CLK => key(1), Resetn => key(0), Q => g);
+Register_3: Regn generic map(N => 16) port map(R => s, CLK => key(1), Resetn => key(0), Q => g);
 FF: Flip_Flop port map(D => d, CLK => key(1), Resetn => key(0), OVF => e);
 
 LEDR <= (others => e);
