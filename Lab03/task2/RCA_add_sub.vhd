@@ -63,7 +63,7 @@ Segment: seg_7 port map(sw => std_logic_vector(g), hex0 => hex2);
 Segment1: seg_7 port map(sw => std_logic_vector(a), hex0 => hex0);
 Segment2: seg_7 port map(sw => std_logic_vector(b), hex0 => hex1);
 
-process(key(1))
+process(e) --e is the clock
 begin
 if e='1' then
 LEDR <= "1111111111";
