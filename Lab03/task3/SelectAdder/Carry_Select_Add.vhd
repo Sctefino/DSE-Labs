@@ -87,13 +87,6 @@ OVERF: ovf port map(a_msb => a_ff(15), b_msb => b_ff(15), s_msb => s_add(15), ov
 Register_3: Reg generic map ( N => 16) port map(R => s_add, CLK => key(1), Resetn => key(0), Q => s);
 FF: Flip_Flop port map(D => d, CLK => key(1), Resetn => key(0), OVF => e);
 
-process(key(1))
-begin
-if e='1' then
-LEDR <= "1111111111";
-elsif e='0' then
-LEDR <= "0000000000";
-end if;
-end process;
+LEDR <= (others => e);
 
 end str;
