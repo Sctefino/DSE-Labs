@@ -12,7 +12,7 @@ architecture str of flash_digit is
 
 component counter
 Generic (N : integer := 26);
-port (ck, rstn, clear: in std_logic;
+port (ck, rstn, clear, enable: in std_logic;
 		b: out std_logic_vector(N-1 downto 0));
 end component;
 
@@ -34,11 +34,11 @@ signal clear1,clear2: std_logic;
 begin
 count1: counter
 generic map (N => 26)
-port map (clock_50, key(0), clear1, add1out);
+port map (clock_50, key(0), clear1, '1', add1out);
 
 count2: counter
 generic map (N => 4)
-port map (clear1, key(0), clear2, add2out);
+port map (clock_50, key(0), clear2, clear1, add2out);
 
 comp1: comparator
 generic map (N => 26)
