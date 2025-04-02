@@ -10,13 +10,13 @@ entity counter is
 end counter;
 
 architecture Behavioral of counter is
-    signal count : integer range 0 to 50000 := 0;
+    signal count : integer range 0 to 50000000 := 0;
     signal a_internal : std_logic := '0';
 begin
     process(ck)
     begin
         if rising_edge(ck) then
-            if count = 50000 then
+            if count = 50000000 then
                 count <= 0;
                 a_internal <= '1';
             else
