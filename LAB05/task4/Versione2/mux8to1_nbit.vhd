@@ -14,7 +14,7 @@ architecture beh of mux8to1_nbit is
 
 begin
 
-process(sel)
+process(sel, a)
 begin
 	if sel = "000" then
 		q <= "0001001"; --H
