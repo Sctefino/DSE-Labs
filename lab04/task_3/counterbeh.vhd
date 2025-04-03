@@ -8,7 +8,7 @@ key : in std_logic_vector(3 downto 0);
 hex0,hex1,hex2,hex3 : out std_logic_vector(6 downto 0));
 end counterbeh;
 
-architecture str of counterbeh is
+architecture beh of counterbeh is
 
 component adder
 port (a : in std_logic_vector(1 downto 0);
@@ -39,4 +39,4 @@ port map(suma(11 downto 8),hex2);
 
 hex_3 : seg_7
 port map(suma(15 downto 12),hex3);
-end str;
+end beh;
