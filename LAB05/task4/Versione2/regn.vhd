@@ -13,7 +13,7 @@ begin
 process(CLK, Resetn)
 begin
 	if (Resetn = '0') then
-		Q <= (others => '0');
+		Q <= (others => '1');
 	elsif (CLK'event and CLK = '1') THEN
 		if enable = '1' then
 			Q <= R;
