@@ -18,11 +18,11 @@ end component;
 signal A, Bin, Bout, Cin, Cout, Din, Dout, Ein, Eout, Fin, Fout, Gin, Gout, Hin, Hout, Iin, Iout: std_logic;
 begin
 
-Bin <= (A and not(sw(1))) or ((Fout or Gout or Hout or Iout) and not(sw(1)));
+Bin <= (not(A) and not(sw(1))) or ((Fout or Gout or Hout or Iout) and not(sw(1)));
 Cin <= Bout and not(sw(1));
 Din <= Cout and not(sw(1));
 Ein <= (Dout or Eout) and not(sw(1));
-Fin <= (A and sw(1)) or ((Bout or Cout or Dout or Eout) and sw(1));
+Fin <= (not(A) and sw(1)) or ((Bout or Cout or Dout or Eout) and sw(1));
 Gin <= Fout and sw(1);
 Hin <= Gout and sw(1);
 Iin <= (Hout or Iout) and sw(1);
