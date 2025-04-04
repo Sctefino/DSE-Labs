@@ -1,0 +1,29 @@
+int memA[1023], memB[1023];
+
+while(1)
+	if(start == 1) {
+		done = 0;
+		for(int i = 0; i < 1024; i++) {
+			memA[i] = data_in;
+		}
+
+		for(int i = 0; i < 1024; i++) {
+			if(i > 2)
+				data_inB = - 1*memA[i]/2 - 2*memA[i-1] + 4*memA[i-2] + memA[i-3]/4;
+			else if(i > 1)
+				data_inB = - 1*memA[i]/2 - 2*memA[i-1] + 4*memA[i-2];
+			else if(i > 0)
+				data_inB = - 1*memA[i]/2 - 2*memA[i-1];
+			else
+				data_inB = - 1*memA[i]/2;
+
+			if(data_inB < -2^7)
+				data_inB = -2^7;
+			else if(data_inB > 2^7-1)
+				data_inB = 2^7-1;
+
+			memB[i] = data_inB;
+		}
+		done = 1;
+	}
+}
