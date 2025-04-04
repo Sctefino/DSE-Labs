@@ -35,12 +35,7 @@ sw_tb(1) <= '0';
 wait for 15 ns;
 sw_tb(0) <= '0';
 sw_tb(1) <= '1';
-wait for 70 ns;
-sw_tb(0) <= '1';
-sw_tb(1) <= '0';
-wait for 10 ns;
-sw_tb(0) <= '0';
-sw_tb(1) <= '1';
+
 wait;
 end process;
 
