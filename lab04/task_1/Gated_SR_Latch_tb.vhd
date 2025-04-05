@@ -13,7 +13,7 @@ end component;
 signal CLK_tb, S_tb, R_tb, Q_tb: std_logic;
 
 begin
-Clock: process 
+Clock: process --clock generation 
 begin
 CLK_tb <='0';
 wait for 10 ns;
@@ -22,7 +22,7 @@ wait for 10 ns;
 end process;
 
 process
-begin
+begin --input signal assignations
 R_tb <= '0';
 S_tb <= '1';
 wait for 25 ns;
