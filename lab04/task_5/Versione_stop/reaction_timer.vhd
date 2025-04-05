@@ -11,7 +11,7 @@ hex0,hex1,hex2,hex3 : out std_logic_vector(6 downto 0));
 end reaction_timer;
 
 architecture str of reaction_timer is 
-
+--component declaration
 component seg_7 
 port (sw: in std_logic_vector(3 downto 0);
 hex: out std_logic_vector(6 downto 0));
@@ -56,7 +56,7 @@ signal h0, h1, h2, h3 : std_logic_vector(3 downto 0);
 
 begin
 
-LEDR(0) <= ffout1;
+LEDR(0) <= ffout1; --led lights up at the end of the first count
 LEDR(9 downto 1) <= (others => '0');
 key_3_n <= not(key(3));
 res_ff1 <= not(key(0)) or key_3_n;
@@ -64,14 +64,14 @@ ffin1 <= compout2 and stop;
 stop_cnt2 <= not(compout2);
 cnt2_en <= stop_cnt2 and compout1;
 cnt3_en <= ffout1 and compout1;
-
+--parts creation
 comp1 : comparator
 generic map ( N => 16)
 port map(cnt1out,"1100001101010000",compout1);
 
 comp2 : comparator
 generic map ( N => 8)
-port map(cnt2out,sw,compout2); --Problema: ad occhio spreca 1 ms
+port map(cnt2out,sw,compout2); 
 
 ff1: ff_d
 port map(clock_50, ffin1, res_ff1 ,ffout1);
