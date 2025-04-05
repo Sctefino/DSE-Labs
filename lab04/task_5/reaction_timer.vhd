@@ -69,11 +69,11 @@ cnt3_en <= ffout1 and compout1;
 
 comp1 : comparator
 generic map ( N => 16)
-port map(add1out,"1100001101010000",compout1); --25000 -> chiedi a Gab se lui capisce il perché
+port map(add1out,"1100001101010000",compout1); 
 
 comp2 : comparator
 generic map ( N => 8)
-port map(add2out,sw,compout2); --Problema: ad occhio spreca 1 ms
+port map(add2out,sw,compout2); 
 
 ff1: ff_d
 port map(clock_50, compout2, res_ff1 ,ffout1);
