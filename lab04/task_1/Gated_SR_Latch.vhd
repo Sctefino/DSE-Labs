@@ -12,7 +12,7 @@ signal R_g, S_g, Q_a, Q_b: std_logic;
 attribute keep : boolean;
 attribute keep of R_g, S_g, Q_a, Q_b: signal is true;
 
-begin
+begin --boolean functions
 R_g <= R and CLK;
 S_g <= S and CLK;
 Q_a <= not (R_g or Q_b);
