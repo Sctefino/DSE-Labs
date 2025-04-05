@@ -13,7 +13,7 @@ architecture beh of comparator is
 begin
 process(a,c)
 begin
-if a = c then
+if a = c then --equality condition, generate the required pulse
 b <= '1';
 else
 b <= '0';
