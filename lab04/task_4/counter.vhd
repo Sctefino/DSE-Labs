@@ -15,12 +15,12 @@ signal sum : unsigned(N-1 downto 0) := (others => '0');
 begin
 process (ck, rstn)
 begin
-	if rstn = '0' then
+	if rstn = '0' then --asynchronous reset
 		sum <= (others => '0');
 	elsif rising_edge(ck) then
-		if clear = '1' then
+		if clear = '1' then --synchronous clear
 			sum <= (others => '0');
-		elsif enable = '1' then
+		elsif enable = '1' then --addition
 			sum <= sum + 1;		
 		end if;
 	end if;
