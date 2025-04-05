@@ -11,14 +11,14 @@ end adder;
 architecture beh of adder is
 signal c : unsigned(1 downto 0) ;
 signal d : unsigned(15 downto 0);
-signal sum : unsigned(15 downto 0) := "0000000000000000";
+signal sum : unsigned(15 downto 0) := "0000000000000000"; --zero initialization
 begin
 process(ck)
 begin
-if ck = '1' and ck'event and a(0)='0' then
+if ck = '1' and ck'event and a(0)='0' then --addition
 sum <= sum + "0000000000000001";
 b <= std_logic_vector(sum);
-elsif ck = '1' and ck'event and a(0)='1' then
+elsif ck = '1' and ck'event and a(0)='1' then --reset
 b <= "0000000000000000";
 sum <= "0000000000000000";
 end if;
