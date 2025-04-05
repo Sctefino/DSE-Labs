@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 entity counter is
 port (SW : in std_logic_vector(1 downto 0);
-key : in std_logic_vector(3 downto 0);
+key : in std_logic_vector(3 downto 0); --declared as vector because of board functioning purposes
 hex0,hex1,hex2,hex3 : out std_logic_vector(6 downto 0));
 end counter;
 architecture str of counter is
@@ -22,7 +22,7 @@ signal a,b,c,d,e,f,g,h,i,l,m,n,o,p,q,r,s,t,u,v,z,j,k,w,x,y,a1,b1,c1,d1,e1,f1,g1,
 
 signal j1,k1,w1,x1 : std_logic_vector(3 downto 0);
 
-begin
+begin --creation of components
 ff1 : ff
 port map (SW(1),key(0),SW(0),a,b);
 c <= a and SW(1);
