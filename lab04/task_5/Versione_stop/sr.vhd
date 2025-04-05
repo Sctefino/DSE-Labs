@@ -18,7 +18,7 @@ signal s_sr, q_sr: std_logic := '1';
 signal q_n_sr: std_logic := '0';
 begin
 
-mux1: mux port map('1', s, r, s_sr); --inserimento mux per evitare condizione vietata -> se reset a 1, s_sr e' 0
+mux1: mux port map('1', s, r, s_sr); --mux inserted to avoid violation of teh sr latch
 
 q_sr <= s_sr nand q_n_sr;
 q_n_sr <= r nand q_sr;
