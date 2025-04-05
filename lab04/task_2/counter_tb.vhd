@@ -8,7 +8,7 @@ end counter_tb;
 architecture str of counter_tb is
 component counter is
 port (SW : in std_logic_vector(1 downto 0);
-key : in std_logic;
+key : in std_logic; --standard logic for simulation purposes
 hex0, hex1, hex2, hex3 : out std_logic_vector(6 downto 0));
 end component;
 
