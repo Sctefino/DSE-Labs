@@ -34,15 +34,15 @@ signals: process
 begin
 wait for 10 ms;
 key_tb(0) <= '0';
-wait for 10 ns;
+wait for 500 us;
 key_tb(0) <= '1';
 wait for 50 ms;
 key_tb(3) <= '0';
-wait for 5 ns;
+wait for 500 us;
 key_tb(3) <= '1';
 wait for 20 ms;
 key_tb(0) <= '0';
-wait for 20 ns;
+wait for 500 us;
 key_tb(0) <= '1';
 wait;
 end process;
