@@ -46,6 +46,9 @@ int main() {
         fprintf(fp3, "%s\n", bin); // Write the binary representation to the output_bin file
     }
 
+    fclose(fp2); // Close the output file
+    fclose(fp3); // Close the output_bin file
+
     return 0;
 }
 
