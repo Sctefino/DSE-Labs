@@ -40,11 +40,11 @@ a : in std_logic_vector(7 downto 0);
 b : out std_logic_vector(7 downto 0));
 end component;
 
-signal present_state,next_state : std_logic_vector(2 downto 0);
+signal present_state,next_state : std_logic_vector(2 downto 0) := (others => '0');
 signal en1,en2,en3,wr1,rd1,cs1,wr2,rd2,cs2,compout1,compout3,reg_en : std_logic;
 signal count1,count3,count2 : std_logic_vector(9 downto 0);
 signal data_in2 : std_logic_vector(7 downto 0);
-signal data_out1,data_out2,regout1,regout2,regout3,regout4 : std_logic_vector(7 downto 0);
+signal data_out1,data_out2,regout1,regout2,regout3,regout4 : std_logic_vector(7 downto 0) := (others => '0');
 
 begin
 
@@ -59,7 +59,7 @@ port map(count3,data_in2,WR2,RD2,clock_50,CS2,Data_out2);
 counter1 : counter
 port map(clock_50,en1,rst,count1);
 
-counter2 : counter
+counter2 : counter --da togliere
 port map(clock_50,en2,rst,count2);
 
 counter3 : counter
@@ -97,7 +97,7 @@ present_state <= next_state;
 end if;
 end process;
 
-process(present_state)
+process(present_state, start, compout1, compout3)
 begin
 case present_state is
 when "000" => WR1 <= '0';
@@ -133,7 +133,7 @@ when "010" => CS1 <= '1';
 WR1 <= '0';
 RD1 <= '1';
 EN2 <= '1';
-EN1 <= '0';
+EN1 <= '1';
 EN3 <= '0';
 CS2 <= '0';
 RD2 <= '0';
@@ -150,7 +150,7 @@ CS1 <= '1';
 WR2 <= '0';
 RD2 <= '0';
 CS2 <= '0';
-EN1 <= '0';
+EN1 <= '1';
 EN2 <= '1';
 EN3 <= '0';
 DONE <= '0';
@@ -163,9 +163,9 @@ EN3 <= '1';
 CS1 <= '1';
 WR1 <= '0';
 RD1 <= '1';
-EN1 <= '0';
+EN1 <= '1';
 EN2 <= '1';
-reg_en <= '0';
+reg_en <= '1';
 DONE <= '0';
 if compout3 = '1' then
 next_state <= "000";

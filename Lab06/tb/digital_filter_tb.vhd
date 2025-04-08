@@ -31,9 +31,9 @@ segnali: process
 begin
 input_tb <= "01110001";
 start_tb <= '1';
-wait for 5 ns;
+wait for 15 ns;
 start_tb <= '0';
-wait for 20 ns;
+wait for 10 ns;
 input_tb <= "11001000";
 wait for 20 ns;
 input_tb <= "10010011";
