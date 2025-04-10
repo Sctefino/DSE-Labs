@@ -53,11 +53,13 @@ int main() {
 }
 
 void intToBin(int x, char *bin) {
+    bin[0] = '0'; // Initialize the first bit to '0'
     if(x < 0) {
         x = (1 << 7) + x; // Convert negative number to its 2's complement representation
+        bin[0] = '1'; // Set the first bit to '1' for negative numbers
     }
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 7; i++) {
         bin[7 - i] = (x & (1 << i))? '1' : '0'; // Set the bit at position i
     }
     bin[8] = '\0'; // Null-terminate the string
