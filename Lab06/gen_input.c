@@ -29,7 +29,7 @@ int main() {
     for (int i = 0; i < 1024; i++) {
         x = rand() % 256; // Random number between 0 and 255
         intToBin(x, bin);
-        fprintf(fp2, "input_tb <= \"%s\";\nwait for 10 ns;\n", bin); // Write binary representation to testbench.txt
+        fprintf(fp2, "input_tb <= \"%s\";\nwait for 20 ns;\n", bin); // Write binary representation to testbench.txt
         binToInt(bin, &x);
         fprintf(fp1, "%d\n", x); // Write binary representation to input.txt
     }

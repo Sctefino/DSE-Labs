@@ -5,11 +5,12 @@ use ieee.numeric_std.all;
 entity datapath is
 port(data_A: in std_logic_vector(7 downto 0);
 	  controls: in std_logic_vector(11 downto 0);
-	  -- reset, cntAen, cntBen, reg1en, reg2en, reg3en, reg4en, regaccen, sel1, sel2, sub
+	  --reset, cntAen, cntBen, reg1en, reg2en, reg3en, reg4en, regaccen, sel1, sel2_1, sel2_0, sub
 	  clk: in std_logic;
 	  address_A, address_B: out std_logic_vector(9 downto 0);
 	  data_B: out std_logic_vector(7 downto 0);
-	  status: out std_logic_vector(1 downto 0) --enable dei due counter
+	  status: out std_logic_vector(1 downto 0)
+	  --cntB_en, cntA_en
 	  );
 end datapath;
 

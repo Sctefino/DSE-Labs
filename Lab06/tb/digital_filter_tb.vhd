@@ -7,17 +7,15 @@ end digital_filter_tb;
 architecture beh of digital_filter_tb is
 
 component digital_filter is
-port ( start : in std_logic;
-clock_50,rst : in std_logic;
-data_in1: in std_logic_vector(7 downto 0);
-done : out std_logic);
+port (data_in: in std_logic_vector(7 downto 0);
+		start, clk: in std_logic;
+		done : out std_logic);
 end component;
-signal start_tb, clk_tb, rst_tb, done_tb: std_logic;
+signal start_tb, clk_tb, done_tb: std_logic;
 signal input_tb: std_logic_vector(7 downto 0);
 begin
 
-testbench: digital_filter port map(start_tb, clk_tb, rst_tb, input_tb, done_tb);
-rst_tb <= '0';
+testbench: digital_filter port map(input_tb, start_tb, clk_tb, done_tb);
 
 clock: process
 begin
@@ -30,10 +28,12 @@ end process;
 segnali: process
 begin
 input_tb <= "01110001";
-start_tb <= '1';
-wait for 15 ns;
 start_tb <= '0';
-wait for 10 ns;
+wait for 15 ns;
+start_tb <= '1';
+wait for 25 ns;
+start_tb <= '0';
+wait for 15 ns;
 input_tb <= "11001000";
 wait for 20 ns;
 input_tb <= "10010011";

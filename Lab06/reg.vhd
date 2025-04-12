@@ -6,10 +6,11 @@ entity reg is
 generic(N: integer);
 port (ck,en,rst : in std_logic;
 		a : in std_logic_vector(N-1 downto 0);
-		b : out std_logic_vector(N-1 downto 0));
+		b : out std_logic_vector(N-1 downto 0) := (others => '0'));
 end reg;
 
 architecture beh of reg is
+
 begin
 
 process(ck,rst)

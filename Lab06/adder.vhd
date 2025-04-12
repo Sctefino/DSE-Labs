@@ -10,19 +10,19 @@ end adder;
 
 architecture beh of adder is
 
-signal a_sign, b_sign, sum : signed(11 downto 0);
+signal sum : signed(11 downto 0);
 
 begin
 
-a_sign <= signed(a);
-b_sign <= signed(b);
+--a_sign <= signed(a);
+--b_sign <= signed(b);
 
 process(a,b,sub)
 begin
 	if sub = '1' then
-		sum <= a_sign - b_sign;
+		sum <= signed(a) - signed(b);
 	elsif sub = '0' then
-		sum <= a_sign + b_sign;
+		sum <= signed(a) + signed(b);
 	else
 		sum <= (others => '0');
 	end if;

@@ -19,7 +19,7 @@ signal cell : mem_array := (others => (others => '0'));
 
 begin
 
-process(clk, RD, CS)
+process(clk, RD, CS, data_in, add)
 begin
 	if(CS = '1') then
 		if(RD = '1') then
