@@ -21,6 +21,7 @@ component mux
 end component;
 
 signal state,next_state : STD_LOGIC_VECTOR(8 downto 0);
+signal x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9: std_logic;
 
 begin
 
@@ -35,17 +36,27 @@ FF_G : FF port map (KEY(0),SW(0), next_state(6), state(6));
 FF_H : FF port map (KEY(0),SW(0), next_state(7), state(7));
 FF_I : FF port map (KEY(0),SW(0), next_state(8), state(8));
 
-MUX_A : mux port map('0','1', not(state(0) or state(1) or state(2) or state(3) or state(4) or state(5) or state(6) or state(7) or state(8)), next_state(0));
+x_1 <= not(state(0) or state(1) or state(2) or state(3) or state(4) or state(5) or state(6) or state(7) or state(8));
+x_2 <= (not(sw(1)) and state(0)) or ((state(5) or state(6) or state(7) or state(8)) and not(sw(1)));
+x_3 <= not(sw(1)) and state(1);
+x_4 <= not(sw(1)) and state(2);
+x_5 <= not(sw(1)) and (state(3) or state(4));
+x_6 <= (sw(1) and state(0)) or ((state(1) or state(2) or state(3) or state(4))and sw(1));
+x_7 <= sw(1) and state(5);
+x_8 <= sw(1) and state(6);
+x_9 <= sw(1) and (state(7) or state(8));
 
-MUX_B : mux port map('0','1',(not(sw(1)) and state(0)) or (((state(5) or state(6) or state(7) or state(8))) and not(sw(1))),next_state(1));
-MUX_C : mux port map('0','1', not(sw(1)) and state(1),next_state(2));
-MUX_D : mux port map('0','1', not(sw(1)) and state(2),next_state(3));
-MUX_E : mux port map('0','1', not(sw(1)) and (state(3) or state(4)),next_state(4));
+MUX_A : mux port map('0','1', x_1, next_state(0));
 
-MUX_F : mux port map('0','1', (sw(1) and state(0)) or ((state(1) or state(2) or state(3) or state(4))and sw(1)),next_state(5));
-MUX_G : mux port map('0','1', sw(1) and state(5),next_state(6));
-MUX_H : mux port map('0','1', sw(1) and state(6),next_state(7));
-MUX_I : mux port map('0','1', sw(1) and (state(7) or state(8)),next_state(8));
+MUX_B : mux port map('0','1', x_2, next_state(1));
+MUX_C : mux port map('0','1', x_3, next_state(2));
+MUX_D : mux port map('0','1', x_4, next_state(3));
+MUX_E : mux port map('0','1', x_5, next_state(4));
+
+MUX_F : mux port map('0','1', x_6, next_state(5));
+MUX_G : mux port map('0','1', x_7, next_state(6));
+MUX_H : mux port map('0','1', x_8, next_state(7));
+MUX_I : mux port map('0','1', x_9, next_state(8));
 
 LEDR(0) <= '1' when (state(4) = '1' or state(8) = '1') else '0';
 --LEDR(9 downto 1) <= (others => '0');
