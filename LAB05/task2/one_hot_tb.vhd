@@ -30,14 +30,8 @@ sw_tb(0) <= '1';
 sw_tb(1) <= '0';
 wait for 20 ns;
 sw_tb(1) <= '1';
---wait for 5 ns;
---sw_tb(0) <= '1';
 wait for 30 ns;
 sw_tb(0) <= '0';
---wait for 50 ns;
---sw_tb(1) <= '0';
---wait for 40 ns;
---sw_tb(0) <= '1';
 wait;
 end process;
 
