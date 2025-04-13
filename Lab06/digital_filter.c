@@ -28,13 +28,13 @@ int main() {
 
     for(int i = 0; i < 1024; i++) {
         if(i > 2) 
-			data_inB = - 1*input[i]/2 - 2*input[i-1] + 4*input[i-2] + input[i-3]/4;
+			data_inB = - (input[i] >> 1) - (input[i-1] << 1) + (input[i-2] << 2) + (input[i-3] >> 2);
         else if(i > 1)
-            data_inB = - 1*input[i]/2 - 2*input[i-1] + 4*input[i-2];
+            data_inB = - (input[i] >> 1) - (input[i-1] << 1) + (input[i-2] << 2);
 		else if(i > 0)
-			data_inB = - 1*input[i]/2 - 2*input[i-1];
+			data_inB = - (input[i] >> 1) - (input[i-1] << 1);
 		else
-			data_inB = - 1*input[i]/2;
+			data_inB = - (input[i] >> 1);
 
 		if(data_inB < -1*(1 << 7))
 			data_inB = -1*(1 << 7);
