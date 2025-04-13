@@ -37,8 +37,8 @@ FF_G : FF port map (KEY(0),SW(0), next_state(6), state(6));
 FF_H : FF port map (KEY(0),SW(0), next_state(7), state(7));
 FF_I : FF port map (KEY(0),SW(0), next_state(8), state(8));
 
-x_1 <= '1';
-x_2 <= (not(sw(1)) and not(state(0))) or ((state(5) or state(6) or state(7) or state(8)) and not(sw(1)));
+x_1 <= '1'; --always 1 except for reset
+x_2 <= (not(sw(1)) and not(state(0))) or ((state(5) or state(6) or state(7) or state(8)) and not(sw(1))); --now state(0) is zero, so add not
 x_3 <= not(sw(1)) and state(1);
 x_4 <= not(sw(1)) and state(2);
 x_5 <= not(sw(1)) and (state(3) or state(4));
