@@ -30,6 +30,7 @@ end process;
 
 process(ps, start, status)
 begin
+	ns <= ps;
 	done <= '0';
 	case ps is
 		when RST =>
