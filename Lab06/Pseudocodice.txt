@@ -1,4 +1,4 @@
-int memA[1023], memB[1023];
+int memA[1024], memB[1024];
 
 while(1)
 	if(start == 1) {
