@@ -15,7 +15,7 @@ end cu;
 
 architecture beh of cu is
 
-type state_type is (RST,IDLE,A,B,C,D,E,F);
+type state_type is (RST,IDLE,A,B,C,D,E,F,G);
 signal ps, ns: state_type := RST;
 
 
@@ -68,11 +68,15 @@ begin
 			controls <= "011111100000"; -- leggo da mem A, scrivo su registri e mem B
 			controls_mem <= "110101";
 			if status(1) = '1' then
-				done <= '1';
-				ns <= RST;
+				ns <= G;
 			else
 				ns <= C;
 			end if;
+		when G =>
+			controls <= "000000000000"; --alzo done
+			controls_mem <= "000000";
+			done <= '1';
+			ns <= RST;
 		when others =>
 			controls <= (others => '0');
 			controls_mem <= (others => '0');
