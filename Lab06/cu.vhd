@@ -73,6 +73,10 @@ begin
 			else
 				ns <= C;
 			end if;
+		when others =>
+			controls <= (others => '0');
+			controls_mem <= (others => '0');
+			ns <= RST;
 	end case;
 			
 end process;
