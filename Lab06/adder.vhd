@@ -20,7 +20,7 @@ begin
 process(a,b,sub)
 begin
 	if sub = '1' then
-		sum <= signed(a) - signed(b);
+		sum <= signed(a) - signed(b); --working with signed numbers, but inputs are std_logic
 	elsif sub = '0' then
 		sum <= signed(a) + signed(b);
 	else
