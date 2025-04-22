@@ -19,16 +19,21 @@ signal cell : mem_array := (others => (others => '0'));
 
 begin
 
-process(clk, RD, CS, data_in, add)
+process(CS,RD,cell)
 begin
-	if(CS = '1') then
-		if(RD = '1') then
-			data_out <= cell(to_integer(unsigned(add)));
-		elsif (clk'event and clk = '1' and WR = '1') then
-			cell(to_integer(unsigned(add))) <= data_in;
+	if(CS = '1') and (RD = '1') then
+		data_out <= cell(to_integer(unsigned(add)));
 	end if;
-end if;
 end process;
 
+process(clk)
+begin
+	if rising_edge(clk) then
+		if(CS = '1') and (WR = '1') then
+			cell(to_integer(unsigned(add))) <= data_in;
+		end if;
+	end if;
+end process;
+	   
 
 end beh;
