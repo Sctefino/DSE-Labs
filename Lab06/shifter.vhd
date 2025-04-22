@@ -19,13 +19,13 @@ begin
 process(a,sel)
 begin	 
 	if sel = "00" then
-		b <= a(7) & a(7) & a(7) & a(7) & a(7) & a(7 downto 1);
+		b <= a(7) & a(7) & a(7) & a(7) & a(7) & a(7 downto 1); --div by 2
 	elsif sel = "01" then
-		b <= a(7) & a(7) & a(7) & a(7 downto 0) & '0';
+		b <= a(7) & a(7) & a(7) & a(7 downto 0) & '0'; -- mult by 2
 	elsif sel = "10" then
-		b <= a(7) & a(7) & a(7 downto 0) & "00";
+		b <= a(7) & a(7) & a(7 downto 0) & "00"; --mult by 4
 	else
-		b <= a(7) & a(7) & a(7) & a(7) & a(7) & a(7) & a(7 downto 2);
+		b <= a(7) & a(7) & a(7) & a(7) & a(7) & a(7) & a(7 downto 2); --div by 4
 	end if;
 end process;
 
