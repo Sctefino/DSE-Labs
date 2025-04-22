@@ -17,11 +17,11 @@ begin
 		sum <= (others => '0');
 	elsif ck'event and ck = '1' then
 		if en = '1' then
-			sum <= sum + 1;
+			sum <= sum + 1; --sum done in unsigned
 		end if;
 	end if;
 end process;
 
-count <= std_logic_vector(sum);
+count <= std_logic_vector(sum); --output reconverted in std-logic
 
 end beh;
