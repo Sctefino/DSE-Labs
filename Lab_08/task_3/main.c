@@ -89,7 +89,7 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  LL_TIM_WriteReg(TIM3, PSC, LL_TIM_ReadReg(TIM3, PSC) | 0x10);
+  LL_TIM_WriteReg(TIM3, PSC, LL_TIM_ReadReg(TIM3, PSC) | 0xf);
   LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0xfff);
   LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) | 0x00);
   LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11);     
