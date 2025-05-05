@@ -95,7 +95,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   LL_TIM_WriteReg(TIM3, PSC, LL_TIM_ReadReg(TIM3, PSC) | 0x10);
-  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0xc8);
+  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0xfa);
   LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) | 0x00);
   LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11);
    /* Infinite loop */
