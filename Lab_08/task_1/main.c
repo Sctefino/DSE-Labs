@@ -91,10 +91,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
-  LL_TIM_WriteReg(TIM3, PSC, 16);
-  LL_TIM_WriteReg(TIM3, ARR, 500);
-  LL_TIM_WriteReg(TIM3, CNT, 0);
-  LL_TIM_WriteReg(TIM3, CR1, 17);
+  LL_TIM_WriteReg(TIM3, PSC, LL_TIM_ReadReg(TIM3, PSC) | 0x10);
+  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0x1f4);
+  LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) | 0x00);
+  LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
