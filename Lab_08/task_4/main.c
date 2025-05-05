@@ -89,11 +89,13 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  LL_TIM_WriteReg(TIM3, PSC, 16);              // divide clock by 16
-  LL_TIM_WriteReg(TIM3, ARR, 0xFFFF);         // max overflow, not really used
-  LL_TIM_WriteReg(TIM3, CCR1, 200);           // first target for CH1
-  LL_TIM_WriteReg(TIM3, CCR2, 40);            // first target for CH2
-  LL_TIM_WriteReg(TIM3, CR1, 17); // enable timer
+ LL_TIM_WriteReg(TIM3, PSC, LL_TIM_ReadReg(TIM3, PSC) | 0x10);
+  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0xfff);
+  LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) | 0x00);
+  LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11);     
+  LL_TIM_WriteReg(TIM3, CCR1, LL_TIM_ReadReg(TIM3, CCR1) | 0xc8);         // first target for CH1
+  LL_TIM_WriteReg(TIM3, CCR2, LL_TIM_ReadReg(TIM3, CCR2) | 0x28);            // first target for CH2
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
