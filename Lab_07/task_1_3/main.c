@@ -71,7 +71,14 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+
+  /* System interrupt init*/
+  NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+
+  /* SysTick_IRQn interrupt configuration */
+  NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),15, 0));
 
   /* USER CODE BEGIN Init */
 
@@ -92,34 +99,29 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t delay_time = 4000; // millisecondi iniziali (4s -> 0,25 Hz)
-  uint8_t last_button_state = 1; // stato precedente del bottone (rilasciato)
-
-  uint32_t delay_ms = 2000; // Iniziale: 0,25Hz => 2s ON + 2s OFF
-  uint8_t  prev_button_state = 1; // Pulsante non premuto
-
+  uint32_t delay_ms = 1000000; //STARTING: 0,25Hz -→> 2s ON + 2s OFF
+  uint16_t button_state, prev_button_state = 0x2000; //BUTTON NOT PRESSED
+  int i;
   while (1)
   {
-      // Leggi stato pulsante (0x2000 = bit 13)
-      uint8_t button_state = (LL_GPIO_ReadReg(GPIOC, IDR) & 0x2000);
+	  for (i = 0; i < delay_ms; i++)
+	  {
+		  //READ BUTTON STATE (0x2000 = bit 13)
+		  button_state = (LL_GPIO_ReadReg(GPIOC, IDR) & 0x2000);
+		  //RISING EDGE DETECTION: HIGH TO LOW (RELEASED TO PRESSED)
+		  if (prev_button_state == 0x2000 && button_state == 0)
+		  {
+			  //DOUBLING THE FREQUENCY: ONE-HALF DELAY
+			  delay_ms /= 2;
+		  }
+		  prev_button_state = button_state;
+	  }
+	  //TOGGLE LED PA5
+	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) ^ 0x20); // XOR bit 5
+    /* USER CODE END WHILE */
 
-      // Rising edge detection: da alto (non premuto) a basso (premuto)
-      if (prev_button_state == 1 && button_state == 0)
-      {
-          // Raddoppia frequenza: dimezza il delay
-
-              delay_ms /= 2;
-
-      }
-      prev_button_state = button_state;
-
-      // Toggle del LED PA5
-      LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) ^ 0x20); // XOR bit 5
-
-
+    /* USER CODE BEGIN 3 */
   }
-
-
   /* USER CODE END 3 */
 }
 
@@ -129,39 +131,32 @@ int main(void)
   */
 void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  /** Configure the main internal regulator output voltage
-  */
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
-
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
+  while(LL_FLASH_GetLatency()!= LL_FLASH_LATENCY_0)
   {
-    Error_Handler();
   }
+  LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE2);
+  LL_RCC_HSI_SetCalibTrimming(16);
+  LL_RCC_HSI_Enable();
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+   /* Wait till HSI is ready */
+  while(LL_RCC_HSI_IsReady() != 1)
   {
-    Error_Handler();
+
   }
+  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
+  LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
+  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
+
+   /* Wait till System clock is ready */
+  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
+  {
+
+  }
+  LL_Init1msTick(16000000);
+  LL_SetSystemCoreClock(16000000);
+  LL_RCC_SetTIMPrescaler(LL_RCC_TIM_PRESCALER_TWICE);
 }
 
 /**
