@@ -79,7 +79,7 @@ int main(void)
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  SystemClock_Config();
+  //SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
@@ -89,28 +89,34 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
+  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0x1f4);
+  LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) & 0x00);
+  LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11);
+  SysTick_Config(SystemCoreClock / 1000);
   /* USER CODE END 2 */
-  LL_TIM_WriteReg(TIM3, PSC, 16);
-  LL_TIM_WriteReg(TIM3, ARR, 500);
-  LL_TIM_WriteReg(TIM3, CNT, 0);
-  LL_TIM_WriteReg(TIM3, CR1, 17);
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1) {
-      uint32_t this_count = LL_TIM_ReadReg(TIM3, CNT);
-      if (this_count >= 250) {  // ogni 250 µs
-    	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400);
+  while (1)
+  {
+	  uint32_t this_count = LL_TIM_ReadReg(TIM3, CNT);
+	       if (this_count <= 250) {  // ogni 250 µs
+	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400);
+	       }
+	       else if ((this_count >= 250) && (this_count <= 500)){
+	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400);
+	       }
+	       else
+	       {
+	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) &~ 0x400);
+	       }
 
-      }
-      else
-      {
-    	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400);
-      }
-      }
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-
+}
 
 /**
   * @brief System Clock Configuration
@@ -174,9 +180,9 @@ static void MX_TIM3_Init(void)
   /* USER CODE BEGIN TIM3_Init 1 */
 
   /* USER CODE END TIM3_Init 1 */
-  TIM_InitStruct.Prescaler = 0;
+  TIM_InitStruct.Prescaler = 15;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 65535;
+  TIM_InitStruct.Autoreload = 500;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
   LL_TIM_DisableARRPreload(TIM3);
