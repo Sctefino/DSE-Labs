@@ -100,8 +100,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   uint8_t measure;
   uint16_t delay;
-  float coeff = -2516*3.3/256;
-  LL_TIM_WriteReg(TIM3, CCER, LL_TIM_ReadReg(TIM3, CCER) | 0x11);
+  float coeff = -2516*3.3/256; //Coefficiente per corretta conversione lettura/delay
+  LL_TIM_WriteReg(TIM3, CCER, LL_TIM_ReadReg(TIM3, CCER) | 0x1);
   LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFFD);
   LL_TIM_WriteReg(TIM3, CNT, 0x0);
   LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x1);
@@ -118,13 +118,13 @@ int main(void)
   while (1)
   {
 	  if(LL_ADC_ReadReg(ADC1, SR) & 0x2) {
-	  		  LL_ADC_WriteReg(ADC1, SR, LL_ADC_ReadReg(ADC1, SR) & 0xFFFFFFFD);
+	  		  LL_ADC_WriteReg(ADC1, SR, LL_ADC_ReadReg(ADC1, SR) & 0xFFFD);
 	  		  measure = LL_ADC_ReadReg(ADC1, DR);
 	  		  delay = (uint16_t)(10000 + measure*coeff);
 	  }
 
 	  if (LL_TIM_ReadReg(TIM3, SR) & 0x2) {
-			LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFFFFFFD);
+			LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFFD);
 			LL_TIM_WriteReg(TIM3, CCR1, (LL_TIM_ReadReg(TIM3, CCR1) + delay));
 		}
 
