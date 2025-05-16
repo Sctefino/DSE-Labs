@@ -98,21 +98,22 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  { uint16_t this_count = LL_TIM_ReadReg(TIM3, SR);
+  { 
+	uint16_t this_count = LL_TIM_ReadReg(TIM3, SR);
+	if ((this_count & 0x1) == 0x1) // ogni 250 µs
+	{  
+		LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3,SR) & 0xFFFE);
+	  	if (st == 0x0)
+	      	{
+	      		LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400);
+	      	}
+	  	else
+	      	{
+	      		LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400);
+	      	}
+	  	st ^= 0x1;
 
-  if ((this_count & 0x1) == 0x1) {  // ogni 250 µs
-	   LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3,SR)&0xfffe);
-	  if (st == 0x0)
-	      	  {
-	      		  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400);
-	      	  }
-	  else
-	      	  {
-	      		  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400);
-	      	  }
-	  st ^= 0x1;
-
-  }
+  	}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
