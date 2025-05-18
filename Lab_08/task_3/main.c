@@ -94,12 +94,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x01));
   LL_TIM_WriteReg(TIM3,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x0011) );
-  LL_TIM_WriteReg(TIM3,CCR1,0x371);
-  LL_TIM_WriteReg(TIM3,CCR2,0x31);
-  LL_TIM_WriteReg(TIM3,SR,0X0000);
-  LL_TIM_WriteReg(TIM3,CNT,0X0000);
+  LL_TIM_WriteReg(TIM3,CCR1,0xc8);
+  LL_TIM_WriteReg(TIM3,CCR2,0x28);
+  LL_TIM_WriteReg(TIM3,SR,0X0);
+  LL_TIM_WriteReg(TIM3,CNT,0X0);
 
-  int a=0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -110,18 +109,14 @@ int main(void)
 	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0004) != 0)
 		{
 			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB));
-			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x31));
-			a++;
+			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0xc8));
 			LL_GPIO_WriteReg( GPIOB, ODR,(LL_GPIO_ReadReg(GPIOB,ODR) ^ 0x0400));
-			if (a == 5){
-				a = 0;
-				  LL_TIM_WriteReg(TIM3,CCR2,0x31);
-			}
 		}
 	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0002) != 0)
 		{
 			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD));
 			LL_GPIO_WriteReg( GPIOA, ODR,(LL_GPIO_ReadReg(GPIOA,ODR) ^ 0x0400));
+			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x28));
 		}
 
     /* USER CODE END WHILE */
@@ -160,8 +155,8 @@ void SystemClock_Config(void)
   while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL);
 
   // Inizializza SysTick
-  LL_Init1msTick(80000000);
-  LL_SetSystemCoreClock(80000000);
+  LL_Init1msTick(160000000);
+  LL_SetSystemCoreClock(160000000);
 
   // Prescaler per i timer (TIM3 incluso)
   LL_RCC_SetTIMPrescaler(LL_RCC_TIM_PRESCALER_TWICE);
@@ -192,7 +187,7 @@ static void MX_TIM3_Init(void)
   /* USER CODE END TIM3_Init 1 */
   TIM_InitStruct.Prescaler = 15;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 249;
+  TIM_InitStruct.Autoreload = 65535;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
   LL_TIM_DisableARRPreload(TIM3);
