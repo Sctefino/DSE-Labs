@@ -109,7 +109,7 @@ int main(void)
 	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0004) != 0)
 		{
 			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB));
-			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0xc8));
+			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8));
 			LL_GPIO_WriteReg( GPIOB, ODR,(LL_GPIO_ReadReg(GPIOB,ODR) ^ 0x0400));
 		}
 	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0002) != 0)
@@ -147,7 +147,7 @@ void SystemClock_Config(void)
 
   // Configura prescaler
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
-  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_8);
+  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_2);
   LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
 
   // Seleziona PLL come sorgente di clock di sistema
@@ -155,8 +155,8 @@ void SystemClock_Config(void)
   while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL);
 
   // Inizializza SysTick
-  LL_Init1msTick(160000000);
-  LL_SetSystemCoreClock(160000000);
+  LL_Init1msTick(16000000);
+  LL_SetSystemCoreClock(16000000);
 
   // Prescaler per i timer (TIM3 incluso)
   LL_RCC_SetTIMPrescaler(LL_RCC_TIM_PRESCALER_TWICE);
