@@ -72,10 +72,11 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
   /* System interrupt init*/
-
+  NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_0);
 
   /* USER CODE BEGIN Init */
 
@@ -92,38 +93,28 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x01));
+
   LL_TIM_WriteReg(TIM3,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x0011) );
-  LL_TIM_WriteReg(TIM3,CCR1,0xf9);
-  LL_TIM_WriteReg(TIM3,CCR2,0x31);
-  LL_TIM_WriteReg(TIM3,SR,0X0000);
-  LL_TIM_WriteReg(TIM3,CNT,0X0000);
-  uint16_t value1;
-  uint16_t value2;
-  int a=0;
+  LL_TIM_WriteReg(TIM3,CCR1,0xc8);
+  LL_TIM_WriteReg(TIM3,CCR2,0x28);
+  LL_TIM_WriteReg(TIM3,SR,0X0);
+  LL_TIM_WriteReg(TIM3,CNT,0X0);
+  LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x01));
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //SysTick_Config(SystemCoreClock / 1000);
+  SysTick_Config(SystemCoreClock / 1000);
   while (1)
   {
-	  value1 = LL_TIM_ReadReg(TIM3,SR) & 0x0002;
-	  value2 = LL_TIM_ReadReg(TIM3,SR) & 0x0004;
-	  if (value2 != 0)
-		{
-			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB));
-			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x31));
-			a = a +1;
-			if (a == 5){
-				a = 0;
-				LL_TIM_WriteReg(TIM3,CCR2,0x31); //eventualmente 0x8
-			}
-		}
-	  if (value1 != 0)
-		{
-			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD));
-		}
+	  if (LL_TIM_ReadReg(TIM3,SR) & 0x0002) {
+		LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD));
+		LL_TIM_WriteReg(TIM3,CCR1,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8));
+	  }
+	  if (LL_TIM_ReadReg(TIM3,SR) & 0x0004) {
+		LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB));
+		LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x28));
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -137,36 +128,33 @@ int main(void)
   */
 void SystemClock_Config(void)
 {
-  LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
-  while (LL_FLASH_GetLatency() != LL_FLASH_LATENCY_2);
-
-  // Abilita HSI (oscillatore interno)
+  LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
+  while(LL_FLASH_GetLatency()!= LL_FLASH_LATENCY_0)
+  {
+  }
+  LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE2);
   LL_RCC_HSI_SetCalibTrimming(16);
   LL_RCC_HSI_Enable();
-  while (LL_RCC_HSI_IsReady() != 1);
 
-  // Configura PLL per ottenere 80 MHz da HSI (16 MHz)
-  LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI, LL_RCC_PLLM_DIV_8, 80, LL_RCC_PLLP_DIV_2);
-  LL_RCC_PLL_Enable();
-  while (LL_RCC_PLL_IsReady() != 1);
+   /* Wait till HSI is ready */
+  while(LL_RCC_HSI_IsReady() != 1)
+  {
 
-  // Configura prescaler
+  }
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
-  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_8);
+  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_2);
   LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
+  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
 
-  // Seleziona PLL come sorgente di clock di sistema
-  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
-  while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL);
+   /* Wait till System clock is ready */
+  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
+  {
 
-  // Inizializza SysTick
-  LL_Init1msTick(80000000);
-  LL_SetSystemCoreClock(80000000);
-
-  // Prescaler per i timer (TIM3 incluso)
+  }
+  LL_Init1msTick(16000000);
+  LL_SetSystemCoreClock(16000000);
   LL_RCC_SetTIMPrescaler(LL_RCC_TIM_PRESCALER_TWICE);
 }
-
 
 /**
   * @brief TIM3 Initialization Function
@@ -193,7 +181,7 @@ static void MX_TIM3_Init(void)
   /* USER CODE END TIM3_Init 1 */
   TIM_InitStruct.Prescaler = 15;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 249;
+  TIM_InitStruct.Autoreload = 65535;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
   LL_TIM_DisableARRPreload(TIM3);
@@ -213,7 +201,6 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 2 */
   LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA);
-
   /**TIM3 GPIO Configuration
   PA6   ------> TIM3_CH1
   PA7   ------> TIM3_CH2
@@ -235,16 +222,17 @@ static void MX_TIM3_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-  /* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE BEGIN MX_GPIO_Init_1 */
 
-  /* USER CODE END MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA);
+  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
 
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE BEGIN MX_GPIO_Init_2 */
 
-  /* USER CODE END MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
