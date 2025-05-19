@@ -101,10 +101,10 @@ int main(void)
   while (1)
   {
 	  uint32_t this_count = LL_TIM_ReadReg(TIM3, CNT);
-	       if (this_count <= 250) {  // every 250 µs
+	       if (this_count <= 249) {  // every 250 µs
 	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400); //pin at logic1
 	       }
-	       else if ((this_count >= 250) && (this_count <= 500)){ // second part of period
+	       else if ((this_count > 249) && (this_count <= 499)){ // second part of period
 	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400); //pin at zero
 	       }
 	       else
