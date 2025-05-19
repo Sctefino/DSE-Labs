@@ -106,16 +106,16 @@ int main(void)
   SysTick_Config(SystemCoreClock / 1000);
   while (1)
   {
-	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0004) != 0)
-		{
-			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB));
-			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8));
-			LL_GPIO_WriteReg( GPIOB, ODR,(LL_GPIO_ReadReg(GPIOB,ODR) ^ 0x0400));
-		}
 	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0002) != 0)
 		{
 			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD));
+			LL_TIM_WriteReg(TIM3,CCR1,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8));
 			LL_GPIO_WriteReg( GPIOA, ODR,(LL_GPIO_ReadReg(GPIOA,ODR) ^ 0x0400));
+		}
+	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0004) != 0)
+		{
+			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB));
+			LL_GPIO_WriteReg( GPIOB, ODR,(LL_GPIO_ReadReg(GPIOB,ODR) ^ 0x0400));
 			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x28));
 		}
 
