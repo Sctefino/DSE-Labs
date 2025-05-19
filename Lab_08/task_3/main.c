@@ -92,12 +92,12 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x01)); \\enable clock
-  LL_TIM_WriteReg(TIM3,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x0011) ); \\enable two channels
-  LL_TIM_WriteReg(TIM3,CCR1,0xc8); \\ set channel1 treshold
-  LL_TIM_WriteReg(TIM3,CCR2,0x28); \\ set channel2 treshold
-  LL_TIM_WriteReg(TIM3,SR,0X0); \\clean status
-  LL_TIM_WriteReg(TIM3,CNT,0X0); \\ clear count
+  LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x01)); //enable clock
+  LL_TIM_WriteReg(TIM3,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x0011) ); //enable two channels
+  LL_TIM_WriteReg(TIM3,CCR1,0xc8); // set channel1 treshold
+  LL_TIM_WriteReg(TIM3,CCR2,0x28); // set channel2 treshold
+  LL_TIM_WriteReg(TIM3,SR,0X0); //clean status
+  LL_TIM_WriteReg(TIM3,CNT,0X0); // clear count
 
   /* USER CODE END 2 */
 
@@ -106,17 +106,17 @@ int main(void)
   SysTick_Config(SystemCoreClock / 1000);
   while (1)
   {
-	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0002) != 0) \\first channel flag
+	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0002) != 0) //first channel flag
 		{
-			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD)); \\cancel flag
-			LL_TIM_WriteReg(TIM3,CCR1,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8)); \\update treshold
-			LL_GPIO_WriteReg( GPIOA, ODR,(LL_GPIO_ReadReg(GPIOA,ODR) ^ 0x0400)); \\toggle pin
+			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD)); //cancel flag
+			LL_TIM_WriteReg(TIM3,CCR1,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8)); //update treshold
+			LL_GPIO_WriteReg( GPIOA, ODR,(LL_GPIO_ReadReg(GPIOA,ODR) ^ 0x0400)); //toggle pin
 		}
 	  if ((LL_TIM_ReadReg(TIM3,SR) & 0x0004) != 0) \\second channel flag
 		{
-			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB)); \\cancel flag
-			LL_GPIO_WriteReg( GPIOB, ODR,(LL_GPIO_ReadReg(GPIOB,ODR) ^ 0x0400)); \\update treshold
-			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x28)); \\toggle pin
+			LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB)); //cancel flag
+			LL_GPIO_WriteReg( GPIOB, ODR,(LL_GPIO_ReadReg(GPIOB,ODR) ^ 0x0400)); //update treshold
+			LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x28)); //toggle pin
 		}
 
     /* USER CODE END WHILE */
