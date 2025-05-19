@@ -89,10 +89,10 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) & 0x00);
-  LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11);
-  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0xf9);
-  LL_TIM_WriteReg(TIM3,SR,0X0);
+  LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) & 0x00); \\clean count
+  LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11); \\enable clock
+  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0xf9); \\set arrival
+  LL_TIM_WriteReg(TIM3,SR,0X0); \\clean status
   uint16_t st = 0x1;
   SysTick_Config(SystemCoreClock / 1000);
   /* USER CODE END 2 */
@@ -104,16 +104,16 @@ int main(void)
 	uint16_t this_count = LL_TIM_ReadReg(TIM3, SR);
 	if ((this_count & 0x1) == 0x1) // ogni 250 µs
 	{  
-		LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3,SR) & 0xFFFE);
+		LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3,SR) & 0xFFFE); \\clean flag
 	  	if (st == 0x0)
 	      	{
-	      		LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400);
+	      		LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400); \\pin to zero
 	      	}
 	  	else
 	      	{
-	      		LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400);
+	      		LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400); \\pin to one
 	      	}
-	  	st ^= 0x1;
+	  	st ^= 0x1; \\toggle status
 
   	}
     /* USER CODE END WHILE */
