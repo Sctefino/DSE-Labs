@@ -89,10 +89,10 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0x1f3); \\set arr
-  LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) & 0x00); \\ clear count
-  LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11); \\ enable clock
-  LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0x0); \\ clean status
+  LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0x1f3); //set arr
+  LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) & 0x00); //clear count
+  LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11); // enable clock
+  LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0x0); //clean status
   SysTick_Config(SystemCoreClock / 1000);
   /* USER CODE END 2 */
 
@@ -102,10 +102,10 @@ int main(void)
   {
 	  uint32_t this_count = LL_TIM_ReadReg(TIM3, CNT);
 	       if (this_count <= 250) {  // every 250 µs
-	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400); \\pin at logic1
+	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) | 0x400); //pin at logic1
 	       }
 	       else if ((this_count >= 250) && (this_count <= 500)){ // second part of period
-	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400); \\pin at zero
+	     	  LL_GPIO_WriteReg(GPIOA, ODR, LL_GPIO_ReadReg(GPIOA, ODR) & ~0x400); //pin at zero
 	       }
 	       else
 	       {
