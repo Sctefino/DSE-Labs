@@ -94,12 +94,12 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-  LL_TIM_WriteReg(TIM3,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x0011) );
-  LL_TIM_WriteReg(TIM3,CCR1,0xc8);
-  LL_TIM_WriteReg(TIM3,CCR2,0x28);
-  LL_TIM_WriteReg(TIM3,SR,0X0);
-  LL_TIM_WriteReg(TIM3,CNT,0X0);
-  LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x01));
+  LL_TIM_WriteReg(TIM3,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x0011) ); \\enable channels of tim3
+  LL_TIM_WriteReg(TIM3,CCR1,0xc8); \\channel1 treshold
+  LL_TIM_WriteReg(TIM3,CCR2,0x28); \\channel2 treshold
+  LL_TIM_WriteReg(TIM3,SR,0X0); \\clear status
+  LL_TIM_WriteReg(TIM3,CNT,0X0); \\clear count
+  LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x01)); \\enable clock
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,12 +108,12 @@ int main(void)
   while (1)
   {
 	  if (LL_TIM_ReadReg(TIM3,SR) & 0x0002) {
-		LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD));
-		LL_TIM_WriteReg(TIM3,CCR1,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8));
+		LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFD)); \\cancel flag
+		LL_TIM_WriteReg(TIM3,CCR1,(LL_TIM_ReadReg(TIM3,CCR1) + 0xc8)); \\reset treshold
 	  }
 	  if (LL_TIM_ReadReg(TIM3,SR) & 0x0004) {
-		LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB));
-		LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x28));
+		LL_TIM_WriteReg(TIM3,SR,(LL_TIM_ReadReg(TIM3,SR) & 0xFFFB)); \\cancel flag
+		LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 0x28)); \\reset flag
 	  }
     /* USER CODE END WHILE */
 
