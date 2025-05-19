@@ -92,6 +92,7 @@ int main(void)
   LL_TIM_WriteReg(TIM3, ARR, LL_TIM_ReadReg(TIM3, ARR) | 0x1f4);
   LL_TIM_WriteReg(TIM3, CNT, LL_TIM_ReadReg(TIM3, CNT) & 0x00);
   LL_TIM_WriteReg(TIM3, CR1, LL_TIM_ReadReg(TIM3, CR1) | 0x11);
+  LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0x0);
   SysTick_Config(SystemCoreClock / 1000);
   /* USER CODE END 2 */
 
