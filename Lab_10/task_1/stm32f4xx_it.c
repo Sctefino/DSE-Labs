@@ -41,7 +41,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+uint16_t old = 0, new = 0, ovf = 0;
+float f = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,7 +58,18 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-
+/*extern int c1;
+extern int c2;
+extern int c3;
+extern int c4;
+extern int c5;
+extern int c6;
+extern int c7;
+extern int value;
+extern int p;
+extern int hp;
+extern int d;
+*/
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -201,23 +213,12 @@ void SysTick_Handler(void)
 /**
   * @brief This function handles TIM3 global interrupt.
   */
-extern int c1;
-extern int c2;
-extern int c3;
-extern int c4;
-extern int c5;
-extern int c6;
-extern int c7;
-extern int value;
-extern int p;
-extern int hp;
-extern int d;
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	if (LL_TIM_ReadReg(TIM3,SR) & 0x001){
-		c7++;
-	}
+	/*if (LL_TIM_ReadReg(TIM3,SR) & 0x001){
+			c7++;
+		}
 	if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) & (c4 == 0)){
 				c1 = (LL_TIM_ReadReg(TIM3,CCR1) & 0x0000FFFF);
 				c4++;
@@ -226,8 +227,8 @@ void TIM3_IRQHandler(void)
 				LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
 			}
 		if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) & (c4 == 1)){
-			    c4++;
-			    c6 = c7;
+				c4++;
+				c6 = c7;
 				c2 = (LL_TIM_ReadReg(TIM3,CCR1) & 0x0000FFFF);
 				LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
 			}
@@ -249,13 +250,24 @@ void TIM3_IRQHandler(void)
 	c5 = 0;
 	c6 = 0;
 	c7 = 0;
-}
+	*/
+	if(LL_TIM_ReadReg(TIM3, SR) & 0x1) {
+		LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFFE);
+		ovf++;
+	}
+	if(LL_TIM_ReadReg(TIM3, SR) & 0x2) {
+		LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFFD);
+		old = new;
+		new = LL_TIM_ReadReg(TIM3, CCR1);
+		f = (float)160000/(float)(65535*ovf + new - old);
+		ovf = 0;
+	}
 
   /* USER CODE END TIM3_IRQn 0 */
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
   /* USER CODE END TIM3_IRQn 1 */
-
+}
 
 /* USER CODE BEGIN 1 */
 
