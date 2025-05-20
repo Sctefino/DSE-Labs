@@ -58,18 +58,18 @@ float f = 0;
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-/*extern int c1;
-extern int c2;
-extern int c3;
-extern int c4;
-extern int c5;
-extern int c6;
-extern int c7;
-extern int value;
-extern int p;
-extern int hp;
-extern int d;
-*/
+int c1;
+int c2;
+int c3;
+int c4;
+int c5;
+int c6;
+int c7;
+int value;
+int p;
+int hp;
+int d;
+
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -197,7 +197,7 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
   /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
+
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
@@ -216,41 +216,54 @@ void SysTick_Handler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	/*if (LL_TIM_ReadReg(TIM3,SR) & 0x001){
+	if (LL_TIM_ReadReg(TIM3,SR) & 0x001){
+		//Overflow counter
 			c7++;
-		}
-	if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) & (c4 == 0)){
-				c1 = (LL_TIM_ReadReg(TIM3,CCR1) & 0x0000FFFF);
+	}
+	if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) && (c4 == 0)){
+		//Detection of first edge, checking whether it is a rising one or falling one
+				c1 = LL_TIM_ReadReg(TIM3,CCR1);
 				c4++;
+				//Counting overflows until the first edge
 				c5 = c7;
-				value = (LL_GPIO_ReadReg(GPIOA,IDR) & 0x0040)/64;
+				//Value == 1 -> rising edge; Value == 0 -> falling edge
+				value = (LL_GPIO_ReadReg(GPIOA,IDR) & 0x0040);
 				LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
-			}
-		if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) & (c4 == 1)){
-				c4++;
-				c6 = c7;
-				c2 = (LL_TIM_ReadReg(TIM3,CCR1) & 0x0000FFFF);
-				LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
-			}
-		if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) & (c4 == 2)){
-				c3 = (LL_TIM_ReadReg(TIM3,CCR1) & 0x0000FFFF);
-				LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
-				p = c3 + (c7-c5)*65535 - c1;
-				if (value)
-				{
-					hp = c2 + (c6 - c5)*65535 - c1;
-					d = hp / p*100;
-				}
-				else
-				{
-					hp = c3 + (c7 - c6)*65535 - c2;
-					d = hp / p*100;
-				}
+	}
+	else if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) && (c4 == 1)){
+			//Detection of second edge
+			c4++;
+			//Counting overflows until second edge
+			c6 = c7;
+			c2 = LL_TIM_ReadReg(TIM3,CCR1);
+			LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
 		}
-	c5 = 0;
-	c6 = 0;
-	c7 = 0;
-	*/
+	else if (((LL_TIM_ReadReg(TIM3,SR) & 0x002)) && (c4 == 2)){
+			//Detection third edge -> full period of the waveform
+			c3 = LL_TIM_ReadReg(TIM3,CCR1);
+			LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
+			//Calculating period in units (1u = 1/160k) -> fclk = 16Mhz, PSC = 99
+			p = c3 + (c7-c5)*65535 - c1;
+			if (value)
+			{
+				//First transition high -> used to calculate duty cycle
+				hp = c2 + (c6 - c5)*65535 - c1;
+				d = hp*100/p;
+			}
+			else
+			{
+				//Second transition high -> used to calculate duty cycle
+				hp = c3 + (c7 - c6)*65535 - c2;
+				d = hp*100/p;
+			}
+			c4 = 0;
+			c5 = 0;
+			c6 = 0;
+			c7 = 0;
+	}
+
+
+	/*
 	if(LL_TIM_ReadReg(TIM3, SR) & 0x1) {
 		LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFFE);
 		ovf++;
@@ -262,6 +275,7 @@ void TIM3_IRQHandler(void)
 		f = (float)160000/(float)(65535*ovf + new - old);
 		ovf = 0;
 	}
+	*/
 
   /* USER CODE END TIM3_IRQn 0 */
   /* USER CODE BEGIN TIM3_IRQn 1 */
