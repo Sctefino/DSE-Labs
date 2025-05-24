@@ -41,7 +41,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+int value = 0, c1 = 0, c2 = 0, c3 = 0, c4 = 0;
+float p = 0,  d = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -185,7 +186,7 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
   /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
+
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
@@ -204,34 +205,33 @@ void SysTick_Handler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	extern int c1;
-	extern int c2;
-	int c3;
-	extern int p;
-	int value = 0;
+
 	if ((LL_TIM_ReadReg(TIM3,SR) & 0x001) == 1){
 			c3++;
-		}
-	if (((LL_TIM_ReadReg(TIM3,SR) & 0x002) != 0) & (value == 0)){
-			c1 = (LL_TIM_ReadReg(TIM3,CCR1) & 0xFFFF);
+	}
+	if (((LL_TIM_ReadReg(TIM3,SR) & 0x002) != 0) && (value == 0)){
+			c1 = LL_TIM_ReadReg(TIM3,CCR1);
 			value = 1;
+			c4 = c3;
 			LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
-		}
-	if (((LL_TIM_ReadReg(TIM3,SR) & 0x002) != 0) & (value == 1)){
-			c2 = (LL_TIM_ReadReg(TIM3,CCR1) & 0xFFFF);
+	}
+	else if (((LL_TIM_ReadReg(TIM3,SR) & 0x002) != 0) && (value == 1)){
+			c2 = LL_TIM_ReadReg(TIM3,CCR1);
 			value = 0;
 			LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFC);
-
-			p = c2 + c3*65535 - c1;
+			p = c2 + (c3-c4)*65535 - c1; // us
 			c3 = 0;
-			}
+			c4 = 0;
+			d = 4.464e3 / p + 21.4288;
+			LL_TIM_WriteReg(TIM4,CCR1,d);
+	}
 
-		}
+
   /* USER CODE END TIM3_IRQn 0 */
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
   /* USER CODE END TIM3_IRQn 1 */
-
+}
 
 /**
   * @brief This function handles TIM4 global interrupt.
