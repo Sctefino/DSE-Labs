@@ -103,7 +103,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  float coeff = -8815*3.3/256; //Coefficiente calcolato per ottenere frequenze volute
+  //float coeff = -8815*3.3/256; //Coefficiente calcolato per ottenere frequenze volute
   LL_TIM_WriteReg(TIM3,CNT,0X0000);
   LL_TIM_WriteReg(TIM3, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFF1);
   LL_TIM_WriteReg(TIM3,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x0111));
@@ -113,6 +113,9 @@ int main(void)
   LL_TIM_WriteReg(TIM3,CCR3,8000);
   LL_TIM_WriteReg(TIM3,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x1));
 
+  LL_ADC_WriteReg(ADC1, CR1, LL_ADC_ReadReg(ADC1, CR1) | 0x20);
+  LL_ADC_WriteReg(ADC1, CR2, (LL_ADC_ReadReg(ADC1, CR2) & 0xD9FFFAFD)| 0x19000001);
+
   LL_TIM_WriteReg(TIM4,CNT,0X0000);
   LL_TIM_WriteReg(TIM4, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFEF);
   LL_TIM_WriteReg(TIM4,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x1000));
@@ -120,14 +123,18 @@ int main(void)
   LL_TIM_WriteReg(TIM4,CCR4,50000);
   LL_TIM_WriteReg(TIM4,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x1));
 
-  LL_ADC_WriteReg(ADC1, CR1, LL_ADC_ReadReg(ADC1, CR1) | 0x20);
-  LL_ADC_WriteReg(ADC1, CR2, LL_ADC_ReadReg(ADC1, CR2) | 0x1);
+
 
   while (1)
   {
-	  delay1 = (uint16_t)(measure*coeff + 32000);
-	  delay2 = delay1 >> 1;
-	  delay3 = delay1 >> 2;
+	  /*if(LL_ADC_ReadReg(ADC1, SR) & 0x2) {
+	  		LL_ADC_WriteReg(ADC1, SR, LL_ADC_ReadReg(ADC1, SR) & 0xFFFFFFFD);
+	  		measure = LL_ADC_ReadReg(ADC1, DR);
+	  		delay1 = (uint16_t)(measure*coeff + 32000);
+	  		delay2 = delay1 >> 1;
+	  		delay3 = delay1 >> 2;
+	  }
+	  */
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -219,7 +226,7 @@ static void MX_ADC1_Init(void)
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;
   ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_NONE;
   LL_ADC_REG_Init(ADC1, &ADC_REG_InitStruct);
-  LL_ADC_REG_SetFlagEndOfConversion(ADC1, LL_ADC_REG_FLAG_EOC_UNITARY_CONV);
+  LL_ADC_REG_SetFlagEndOfConversion(ADC1, LL_ADC_REG_FLAG_EOC_SEQUENCE_CONV);
   ADC_CommonInitStruct.CommonClock = LL_ADC_CLOCK_SYNC_PCLK_DIV4;
   LL_ADC_CommonInit(__LL_ADC_COMMON_INSTANCE(ADC1), &ADC_CommonInitStruct);
   LL_ADC_REG_StartConversionExtTrig(ADC1, LL_ADC_REG_TRIG_EXT_RISING);

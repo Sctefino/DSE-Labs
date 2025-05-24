@@ -43,6 +43,7 @@
 /* USER CODE BEGIN PV */
 extern uint8_t measure;
 extern uint16_t delay1, delay2, delay3;
+float coeff = -8815*3.3/256; //Coefficiente calcolato per ottenere frequenze volute
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -205,10 +206,12 @@ void SysTick_Handler(void)
 void ADC_IRQHandler(void)
 {
   /* USER CODE BEGIN ADC_IRQn 0 */
-	uint8_t mes;
 	if(LL_ADC_ReadReg(ADC1, SR) & 0x2) {
 		LL_ADC_WriteReg(ADC1, SR, LL_ADC_ReadReg(ADC1, SR) & 0xFFFFFFFD);
 		measure = LL_ADC_ReadReg(ADC1, DR);
+		delay1 = (uint16_t)(measure*coeff + 32000);
+		delay2 = delay1 >> 1;
+		delay3 = delay1 >> 2;
 	}
   /* USER CODE END ADC_IRQn 0 */
 
