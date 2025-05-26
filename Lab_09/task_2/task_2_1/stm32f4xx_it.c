@@ -202,15 +202,15 @@ void SysTick_Handler(void)
   * @brief This function handles TIM3 global interrupt.
   */
 void TIM3_IRQHandler(void)
-{	if ((LL_TIM_ReadReg(TIM3,SR) & 0x002) != 0){
+{	if (LL_TIM_ReadReg(TIM3,SR) & 0x002){
 		LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFD);
 		LL_TIM_WriteReg(TIM3,CCR1,(LL_TIM_ReadReg(TIM3,CCR1) + 500));
 	}
-	if ((LL_TIM_ReadReg(TIM3,SR) & 0x004) != 0){
+	if (LL_TIM_ReadReg(TIM3,SR) & 0x004){
 		LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFFB);
 		LL_TIM_WriteReg(TIM3,CCR2,(LL_TIM_ReadReg(TIM3,CCR2) + 1000));
 	}
-	if ((LL_TIM_ReadReg(TIM3,SR) & 0x008) != 0){
+	if (LL_TIM_ReadReg(TIM3,SR) & 0x008){
 		LL_TIM_WriteReg(TIM3,SR,LL_TIM_ReadReg(TIM3,SR) & 0xFFFFFFF7);
 		LL_TIM_WriteReg(TIM3,CCR3,(LL_TIM_ReadReg(TIM3,CCR3) + 2000));
 
