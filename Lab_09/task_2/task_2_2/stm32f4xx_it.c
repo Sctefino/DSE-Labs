@@ -183,7 +183,9 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+	static int x=0x12c0; // What is this number ?
+	 for(int i=0;i<x;i++);
+	 x = (x >> 2) | (((x & 1)^(x & 2)) << 4);
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
