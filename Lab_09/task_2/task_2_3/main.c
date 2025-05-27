@@ -117,11 +117,11 @@ int main(void)
   LL_ADC_WriteReg(ADC1, CR2, (LL_ADC_ReadReg(ADC1, CR2) & 0xD9FFFAFD)| 0x19000001);
 
   LL_TIM_WriteReg(TIM4,CNT,0X0000);
-  LL_TIM_WriteReg(TIM4, SR, LL_TIM_ReadReg(TIM3, SR) & 0xFFEF);
-  LL_TIM_WriteReg(TIM4,CCER,(LL_TIM_ReadReg(TIM3,CCER) | 0x1000));
-  LL_TIM_WriteReg(TIM4,DIER,(LL_TIM_ReadReg(TIM3,DIER) | 0x0010));
+  LL_TIM_WriteReg(TIM4, SR, LL_TIM_ReadReg(TIM4, SR) & 0xFFEF);
+  LL_TIM_WriteReg(TIM4,CCER,(LL_TIM_ReadReg(TIM4,CCER) | 0x1000));
+  LL_TIM_WriteReg(TIM4,DIER,(LL_TIM_ReadReg(TIM4,DIER) | 0x0010));
   LL_TIM_WriteReg(TIM4,CCR4,50000);
-  LL_TIM_WriteReg(TIM4,CR1,(LL_TIM_ReadReg(TIM3,CR1) | 0x1));
+  LL_TIM_WriteReg(TIM4,CR1,(LL_TIM_ReadReg(TIM4,CR1) | 0x1));
 
 
 
