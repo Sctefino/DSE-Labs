@@ -94,6 +94,7 @@ int main(void)
   LL_TIM_WriteReg(TIM3,DIER,(LL_TIM_ReadReg(TIM3,DIER) | 0xE));
   LL_TIM_WriteReg(TIM3,CNT,0X0);
   LL_TIM_WriteReg(TIM3,SR,0X0);
+  SysTick_Config(SystemCoreClock / 1000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
