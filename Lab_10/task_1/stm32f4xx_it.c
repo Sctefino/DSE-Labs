@@ -41,8 +41,17 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-uint16_t old = 0, new = 0, ovf = 0;
-float f = 0;
+int c1;
+int c2;
+int c3;
+int c4;
+int c5;
+int c6;
+int c7 = 0;
+int value;
+int p;
+int hp;
+int d;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
