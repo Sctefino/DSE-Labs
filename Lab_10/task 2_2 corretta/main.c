@@ -100,9 +100,9 @@ int main(void)
   {
 	    int i = 0;
 	    while (i < 9999) {
-	        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, i);
-	        HAL_Delay(100);
-	        i += 999;
+	        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, i); //change compare value of tim register
+	        HAL_Delay(100); //delay between steps
+	        i += 999; // step of conversion
 	    }
 
 	    i = 9999;
