@@ -98,14 +98,19 @@ int main(void)
 
   while (1)
   {
-	  for (int i=0; i<9999;i+=999){
-	  		  __HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_1, i);
-	  		  HAL_Delay(100);
-	  	  }
-	  	  for (int i=9999; i>=0;i-=999){
-	  		  __HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_1, i);
-	  		  HAL_Delay(100);
-	  	  }
+	    int i = 0;
+	    while (i < 9999) {
+	        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, i);
+	        HAL_Delay(100);
+	        i += 999;
+	    }
+
+	    i = 9999;
+	    while (i >= 0) {
+	        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, i);
+	        HAL_Delay(100);
+	        i -= 999;
+	    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
